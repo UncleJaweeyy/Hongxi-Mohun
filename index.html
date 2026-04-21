@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!-- Basic document settings: character encoding, responsive viewport, and SEO metadata. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="《鸿禧墨魂+30》是一款国风武侠 MMORPG。江湖无界，一世墨魂，开启属于你的武侠征途。">
+    <meta name="keywords" content="鸿禧墨魂+30, 鸿禧墨魂, 武侠游戏, MMORPG, 国风游戏, 江湖">
+    <meta name="author" content="鸿禧墨魂运营团队">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="鸿禧墨魂+30">
+    <meta property="og:description" content="江湖无界，一世墨魂。立即加入，开启你的武侠征途。">
+    <meta property="og:image" content="assets/images/home-background.webp">
+    <meta property="og:type" content="website">
+    <title>鸿禧墨魂+30</title>
+
+    <!-- Browser/app icons shown in tabs, bookmarks, and mobile home-screen shortcuts. -->
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+
+    <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
+    <link rel="preload" href="assets/images/logo-title.svg" as="image" type="image/svg+xml" fetchpriority="high">
+    <link rel="preload" href="assets/images/home-background.webp" as="image" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/home-background-mobile.webp" as="image" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, and animated leaf canvas. -->
+    <div class="fixed-scene" aria-hidden="true">
+      <picture class="scene-bg">
+        <source media="(max-width: 768px)" srcset="assets/images/home-background-mobile.webp">
+        <img src="assets/images/home-background.webp" alt="" fetchpriority="high" decoding="sync">
+      </picture>
+      <div class="scene-shade"></div>
+      <div class="scene-bottom-fade"></div>
+      <canvas class="leaf-canvas" data-leaf-canvas></canvas>
+    </div>
+
+    <!-- Loading overlay: appears briefly while the page enters, then fades out through CSS animation. -->
+    <div class="loading-screen" data-loader aria-hidden="true">
+      <img src="assets/images/logo-title.svg" alt="">
+      <div class="loading-ring"><span>100%</span></div>
+      <p>正在凝聚武魂...</p>
+    </div>
+
+    <!-- Site header: brand mark, main navigation, mobile menu toggle, and account buttons. -->
+    <header class="site-header" data-header>
+      <a class="brand" href="#home" aria-label="返回首页">
+        <span class="brand-mark">墨</span>
+        <span class="brand-name">鸿禧墨魂+30</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false" data-nav-toggle>
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="site-nav" aria-label="主导航" data-nav>
+        <a href="#home">首页</a>
+        <a href="#features">特色</a>
+        <a href="#rank">龙虎榜</a>
+        <a href="#classes">流派</a>
+        <a href="#gallery">绘卷</a>
+        <a href="#news">风云</a>
+        <a href="#community">社群</a>
+        <a href="#guides">攻略</a>
+        <a href="#download">下载</a>
+      </nav>
+      <div class="auth-actions" aria-label="账号操作">
+        <button type="button" data-auth-open="login">登录</button>
+        <button type="button" class="auth-primary" data-auth-open="register">注册</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Homepage view: this stays visible for normal anchor sections like #home, #features, and #rank. -->
+      <div class="page-view is-active" data-page="home">
+        <!-- Hero section: first screen with logo, tagline, call-to-action, and vertical poem text. -->
+        <section class="hero" id="home">
+          <div class="hero-lines" aria-hidden="true">
+            <span>一剑光寒十四州</span>
+            <span>剑气纵横三万里</span>
+          </div>
+          <div class="hero-content">
+            <h1>鸿禧墨魂+30</h1>
+            <img class="hero-logo" src="assets/images/logo-title.svg" alt="鸿禧墨魂+30">
+            <p class="hero-title">江湖无界，一世墨魂</p>
+            <a class="hero-button" href="#download">开始征途</a>
+          </div>
+        </section>
+
+        <!-- Features section: three alternating showcase panels for weapons, costumes, and martial arts. -->
+        <section class="section feature-showcase" id="features">
+          <div class="section-heading">
+            <h2>刀光剑影，皆成传说</h2>
+            <p>从神兵、时装到绝学，每一次成长都能被看见。</p>
+          </div>
+          <div class="feature-story">
+            <article class="feature-item">
+              <figure class="feature-visual feature-visual--weapon" aria-label="神兵套装">
+                <span class="feature-glyph">兵</span>
+              </figure>
+              <div class="feature-copy">
+                <h3>神兵套装</h3>
+                <p>铸造传说中的神兵，激活独特的套装效果。外观与实力同步飞升，成为江湖中令人敬畏的存在。</p>
+              </div>
+            </article>
+            <article class="feature-item feature-item--reverse">
+              <figure class="feature-visual feature-visual--costume" aria-label="酷炫时装">
+                <span class="feature-glyph">裳</span>
+              </figure>
+              <div class="feature-copy">
+                <h3>酷炫时装</h3>
+                <p>收集千百种华丽服饰与武器幻化，定制独一无二的专属造型。流光溢彩的武器特效，让拔剑瞬间惊艳整个江湖。</p>
+              </div>
+            </article>
+            <article class="feature-item">
+              <figure class="feature-visual feature-visual--skill" aria-label="绝世武学">
+                <span class="feature-glyph">武</span>
+              </figure>
+              <div class="feature-copy">
+                <h3>绝世武学</h3>
+                <p>探索失传的武学秘籍，修炼独步天下的盖世神功。每种武学皆有不同套路，相生相克，策略无穷。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Ranking section: interactive leaderboard; script.js fills #rank-body when tabs are clicked. -->
+        <section class="section framed-section ranking-section" id="rank">
+          <div class="section-heading">
+            <h2>风云龙虎榜</h2>
+          </div>
+          <div class="rank-shell">
+            <div class="segmented-control rank-tabs" role="tablist" aria-label="龙虎榜分类">
+              <button type="button" class="is-active" data-rank-tab="世界头目">世界头目</button>
+              <button type="button" data-rank-tab="副本榜单">副本榜单</button>
+              <button type="button" data-rank-tab="杀戮战场">杀戮战场</button>
+              <button type="button" data-rank-tab="攻城争霸">攻城争霸</button>
+            </div>
+            <div class="rank-list" aria-live="polite">
+              <div class="rank-header" role="row">
+                <span>排名</span>
+                <span>豪侠</span>
+                <span>流派</span>
+                <span>战力/积分</span>
+              </div>
+              <div id="rank-body" class="rank-body"></div>
+              <div class="empty-panel" data-rank-empty>榜单暂未开放</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Class section: weapon tabs update the large class panel through renderClassPanel() in script.js. -->
+        <section class="section framed-section class-section" id="classes">
+          <div class="section-heading">
+            <h2>天下流派</h2>
+          </div>
+          <div class="class-layout">
+            <div class="weapon-tabs" role="tablist" aria-label="流派武器" data-class-tabs>
+              <button type="button" class="is-active" data-class="sword"><strong>剑</strong><span>剑宗</span></button>
+              <button type="button" data-class="blade"><strong>刀</strong><span>霸刀</span></button>
+              <button type="button" data-class="spear"><strong>枪</strong><span>神机</span></button>
+              <button type="button" data-class="fist"><strong>拳</strong><span>罗汉</span></button>
+              <button type="button" data-class="bow"><strong>弓</strong><span>飞羽</span></button>
+              <button type="button" data-class="dagger"><strong>刺</strong><span>暗影</span></button>
+            </div>
+            <article class="class-panel" data-class-panel data-cursor="sword">
+              <div class="class-backdrop" aria-hidden="true"></div>
+              <div class="class-watermark">剑宗</div>
+              <div class="class-content">
+                <div class="class-title-row">
+                  <h3>剑宗</h3>
+                  <span>【 剑 】</span>
+                </div>
+                <div class="class-tags">
+                  <span>近战</span>
+                  <span>爆发</span>
+                  <span>突进</span>
+                  <span class="class-stars" aria-label="上手难度四星">★★★★<i>★</i></span>
+                </div>
+                <blockquote>「十步杀一人，千里不留行。」</blockquote>
+                <p>剑宗弟子修习无上剑意，剑法轻灵飘逸，动若脱兔。以极致的爆发和身法斩敌于瞬息之间，是战场上最锐利的锋芒。</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- Gallery section: coverflow-style image carousel controlled by data-gallery buttons in script.js. -->
+        <section class="section framed-section gallery-section" id="gallery">
+          <div class="section-heading">
+            <h2>水墨绘卷</h2>
+            <p>一剑霜寒十四州，尽览江湖风物</p>
+          </div>
+          <div class="gallery-carousel" data-gallery aria-label="游戏图集">
+            <button class="gallery-nav gallery-nav--prev" type="button" aria-label="上一张" data-gallery-prev>‹</button>
+            <div class="gallery-track">
+              <article class="gallery-slide is-active" data-gallery-slide style="--gallery-image: url('assets/images/home-background.webp');">
+                <span>山门</span>
+                <h3>云海栈道</h3>
+              </article>
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1542587222-f9172e5efa63?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+                <span>江湖</span>
+                <h3>古镇烟雨</h3>
+              </article>
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+                <span>山水</span>
+                <h3>万壑听松</h3>
+              </article>
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1620259228303-a8f0835b5958?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+                <span>秘境</span>
+                <h3>幽谷问剑</h3>
+              </article>
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1519791883288-dc8bd696e667?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+                <span>城池</span>
+                <h3>夜火连营</h3>
+              </article>
+            </div>
+            <button class="gallery-nav gallery-nav--next" type="button" aria-label="下一张" data-gallery-next>›</button>
+            <div class="gallery-dots" data-gallery-dots aria-label="选择图集页"></div>
+          </div>
+        </section>
+
+        <!-- News teaser section: compact homepage list that links to the full news subpage. -->
+        <section class="section framed-section news-teaser" id="news">
+          <div class="section-heading">
+            <h2>江湖快报</h2>
+            <p>武林风云变幻，最新动态尽在此处</p>
+          </div>
+          <div class="news-list news-list--teaser" aria-label="最新江湖快报">
+            <article class="news-card news-list-item" data-news-card data-category="公告">
+              <span>公告</span>
+              <h3>《鸿禧墨魂+30》V1.2.5版本更新维护公告</h3>
+              <time datetime="2026-04-06">2026-04-06</time>
+            </article>
+            <article class="news-card news-list-item" data-news-card data-category="活动">
+              <span>活动</span>
+              <h3>“龙争虎斗”天下第一武道会火热报名中</h3>
+              <time datetime="2026-03-25">2026-03-25</time>
+            </article>
+            <article class="news-card news-list-item" data-news-card data-category="公告">
+              <span>公告</span>
+              <h3>关于近期利用游戏BUG非法获利账号的处罚公告</h3>
+              <time datetime="2026-03-22">2026-03-22</time>
+            </article>
+            <article class="news-card news-list-item" data-news-card data-category="活动">
+              <span>活动</span>
+              <h3>清明踏青活动上线，限定时装“青团”等你来拿</h3>
+              <time datetime="2026-03-20">2026-03-20</time>
+            </article>
+          </div>
+          <a class="section-button news-button" href="#news-page">尽览江湖风云</a>
+        </section>
+
+        <!-- Community section: Discord call-to-action with glowing framed presentation. -->
+        <section class="section framed-section community" id="community">
+          <div class="community-halo" aria-hidden="true"></div>
+          <div class="community-copy">
+            <h2>江湖路远，不再孤单</h2>
+            <p>立即加入我们的官方社群，与万千侠客一同交流心得、组队开荒，获取第一手游戏资讯与专属福利。</p>
+          </div>
+          <a class="discord-button" href="https://discord.com/" target="_blank" rel="noreferrer">
+            <svg aria-hidden="true" viewBox="0 0 127.14 96.36">
+              <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.31,46,96.2,53,91.08,65.69,84.69,65.69Z"></path>
+            </svg>
+            <span>加入 DISCORD 社群</span>
+          </a>
+        </section>
+      </div>
+
+      <!-- News subpage: separate page-view shown when the URL hash is #news-page. -->
+      <section class="page-view sub-page" data-page="news-page" aria-labelledby="news-page-title">
+        <a class="back-link" href="#home">返回首页</a>
+        <div class="section-heading">
+          <h1 id="news-page-title">江湖快报</h1>
+          <p>网罗江湖大小事，天下风云出我辈</p>
+        </div>
+        <div class="segmented-control" role="tablist" aria-label="快报分类" data-news-tabs>
+          <button type="button" class="is-active" data-filter="全部">全部</button>
+          <button type="button" data-filter="公告">公告</button>
+          <button type="button" data-filter="活动">活动</button>
+          <button type="button" data-filter="系统">系统</button>
+        </div>
+        <div class="news-list news-list--page" aria-label="快报列表">
+          <article class="news-card" data-news-card data-category="公告">
+            <span>公告</span>
+            <h2>《鸿禧墨魂+30》版本更新维护公告</h2>
+            <p>新增门派试炼、优化背包整理功能，并修复部分经脉异常问题。</p>
+            <time datetime="2026-04-21">2026-04-21</time>
+          </article>
+          <article class="news-card" data-news-card data-category="活动">
+            <span>活动</span>
+            <h2>天下第一武道会火热报名中</h2>
+            <p>全服高手齐聚华山之巅，冠军将获得限定称号与海量元宝奖励。</p>
+            <time datetime="2026-04-18">2026-04-18</time>
+          </article>
+          <article class="news-card" data-news-card data-category="系统">
+            <span>系统</span>
+            <h2>飞鸽传书系统升级与驿站服务时间调整说明</h2>
+            <p>百晓生驿站完成升级，消息投递速度与屏蔽词库同步优化。</p>
+            <time datetime="2026-04-12">2026-04-12</time>
+          </article>
+          <article class="news-card" data-news-card data-category="公告">
+            <span>公告</span>
+            <h2>世界频道不良信息净化行动成果公示</h2>
+            <p>我们将持续维护绿色健康的游戏环境，对违规言论进行封禁处理。</p>
+            <time datetime="2026-04-08">2026-04-08</time>
+          </article>
+          <article class="news-card" data-news-card data-category="活动">
+            <span>活动</span>
+            <h2>神兵重现！“干将莫邪”寻宝活动限时开启</h2>
+            <p>参与寻宝即有机会获得神兵锻造残片与其他珍稀道具。</p>
+            <time datetime="2026-04-03">2026-04-03</time>
+          </article>
+          <article class="news-card" data-news-card data-category="系统">
+            <span>系统</span>
+            <h2>关于跨服战场卡顿问题的修复进度说明</h2>
+            <p>我们已定位到时空缝隙紊乱问题，并正在紧急修复结界。</p>
+            <time datetime="2026-03-29">2026-03-29</time>
+          </article>
+        </div>
+        <div class="pager" aria-label="分页">
+          <button type="button" disabled>上一页</button>
+          <button type="button" disabled>下一页</button>
+        </div>
+      </section>
+
+      <!-- Guides subpage: static guide category cards shown when the URL hash is #guides. -->
+      <section class="page-view sub-page" data-page="guides" aria-labelledby="guides-title">
+        <a class="back-link" href="#home">返回主页</a>
+        <div class="section-heading">
+          <h1 id="guides-title">武功秘籍</h1>
+          <p>此乃江湖百晓生毕生心血，囊括万象，助君一统江湖。</p>
+        </div>
+        <div class="guide-grid">
+          <article>
+            <h2>地图总览</h2>
+            <p>各大主城，野外场景，神秘洞穴的详细地图与资源分布。</p>
+          </article>
+          <article>
+            <h2>新手指南</h2>
+            <p>从创建角色到初识江湖，快速上手游戏的核心系统与玩法。</p>
+          </article>
+          <article>
+            <h2>进阶指南</h2>
+            <p>深入了解筋脉，心法，套装搭配，成为独当一面的大侠。</p>
+          </article>
+          <article>
+            <h2>PVP玩法</h2>
+            <p>华山论剑，跨服战场，帮会争霸，各类PVP活动的规则与技巧。</p>
+          </article>
+          <article>
+            <h2>装备指南</h2>
+            <p>神兵，宝甲，饰品的获取途径，强化，镶嵌与传承全攻略。</p>
+          </article>
+          <article>
+            <h2>宠物资料</h2>
+            <p>珍奇异兽的捕获地点、资质技能、以及培养与进化路线。</p>
+          </article>
+          <article>
+            <h2>生活技能</h2>
+            <p>学习采药、挖矿、锻造、烹饪等技能，成为江湖中的能工巧匠。</p>
+          </article>
+          <article>
+            <h2>其他</h2>
+            <p>奇遇任务、隐藏成就、江湖传闻等疑难杂症的解答。</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- Download subpage: download panel shown when the URL hash is #download. -->
+      <section class="page-view sub-page download-page" data-page="download" aria-labelledby="download-title">
+        <a class="back-link" href="#home">返回首页</a>
+        <div class="download-panel">
+          <h1 id="download-title">客户端下载</h1>
+          <p>准备好了吗，点击下载即刻踏入《鸿禧墨魂+30》的武侠世界。</p>
+          <div class="client-box">
+            <span class="client-icon">Win</span>
+            <div>
+              <h2>Windows 客户端</h2>
+              <p>为 Windows 10/11 优化，提供最完整的游戏体验。</p>
+            </div>
+            <a class="section-button" href="#" aria-label="立即下载 Windows 客户端">立即下载</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Site footer: legal links, brand signature, copyright, and rating notice. -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <nav class="footer-links" aria-label="页脚链接">
+          <a href="#">隐私权政策</a>
+          <span aria-hidden="true">|</span>
+          <a href="#">使用条款</a>
+          <span aria-hidden="true">|</span>
+          <a href="mailto:contact@mohun.com">联系我们</a>
+        </nav>
+        <h2>无界墨香</h2>
+        <p>
+          Copyright © 2026 QX Studio. All Rights Reserved.<br>
+          本游戏情节涉及暴力、不当言语，依游戏软件分级管理办法分类为
+          <span class="rating-badge">辅12级</span>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Floating back-to-top button; script.js reveals it after scrolling. -->
+    <button class="back-top" type="button" aria-label="返回顶部" data-back-top>⌃</button>
+
+    <!-- Auth modal: one dialog containing login, register, and forgot-password forms. -->
+    <div class="auth-modal" data-auth-modal aria-hidden="true">
+      <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+        <button class="modal-close" type="button" aria-label="关闭" data-auth-close>×</button>
+        <p class="eyebrow" data-auth-eyebrow>账号</p>
+        <h2 id="auth-title" data-auth-title>登录江湖</h2>
+
+        <form class="auth-form is-active" data-auth-form="login">
+          <label>
+            大侠尊姓大名
+            <input type="text" autocomplete="username" placeholder="请输入账号">
+          </label>
+          <label>
+            通关密语
+            <input type="password" autocomplete="current-password" placeholder="请输入密码">
+          </label>
+          <button class="section-button" type="submit">登录</button>
+          <button class="text-button" type="button" data-auth-open="forgot">忘记密码</button>
+        </form>
+
+        <form class="auth-form" data-auth-form="register">
+          <label>
+            大侠尊姓大名
+            <input type="text" autocomplete="username" placeholder="创建账号">
+          </label>
+          <label>
+            通关密语
+            <input type="password" autocomplete="new-password" placeholder="至少 6 位字母或数字">
+          </label>
+          <label>
+            再次输入
+            <input type="password" autocomplete="new-password" placeholder="再次输入通关密语">
+          </label>
+          <button class="section-button" type="submit">注册</button>
+        </form>
+
+        <form class="auth-form" data-auth-form="forgot">
+          <label>
+            找回密码凭证
+            <input type="text" autocomplete="username" placeholder="请输入账号或手机号">
+          </label>
+          <button class="section-button" type="submit">发送重置链接</button>
+          <button class="text-button" type="button" data-auth-open="login">想起密语了</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main interaction script: navigation, modals, rankings, class tabs, gallery, and leaf animation. -->
+    <script src="script.js"></script>
+  </body>
+</html>
