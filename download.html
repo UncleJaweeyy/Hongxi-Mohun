@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!-- Basic document settings: character encoding, responsive viewport, and SEO metadata. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="鸿禧墨魂+30官方客户端下载，支持 Windows 10/11，一键进入国风武侠江湖。">
+    <meta name="keywords" content="鸿禧墨魂+30, 鸿禧墨魂下载, 武侠游戏, MMORPG, Windows 客户端, 国风游戏">
+    <meta name="author" content="鸿禧墨魂运营团队">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="客户端下载 - 鸿禧墨魂+30">
+    <meta property="og:description" content="准备好了吗，点击下载即刻踏入《鸿禧墨魂+30》的武侠世界。">
+    <meta property="og:image" content="assets/images/home-background.webp">
+    <meta property="og:type" content="website">
+    <title>客户端下载 - 鸿禧墨魂+30</title>
+
+    <!-- Browser/app icons shown in tabs, bookmarks, and mobile home-screen shortcuts. -->
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+
+    <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
+    <link rel="preload" href="assets/images/home-background.webp" as="image" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/home-background-mobile.webp" as="image" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-current-section="download" class="download-standalone">
+    <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, bottom fade, and animated leaf canvas. -->
+    <div class="fixed-scene" aria-hidden="true">
+      <picture class="scene-bg">
+        <source media="(max-width: 768px)" srcset="assets/images/home-background-mobile.webp">
+        <img src="assets/images/home-background.webp" alt="" fetchpriority="high" decoding="sync">
+      </picture>
+      <div class="scene-shade"></div>
+      <div class="scene-bottom-fade"></div>
+      <canvas class="leaf-canvas" data-leaf-canvas></canvas>
+    </div>
+
+    <main>
+      <section class="download-page download-page-shell" aria-labelledby="download-title">
+        <a class="download-back-link" href="index.html#home">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M10 19 3 12l7-7m-7 7h18"></path>
+          </svg>
+          <span>返回首页</span>
+        </a>
+
+        <div class="download-heading">
+          <h1 id="download-title">客户端下载</h1>
+          <p>准备好了吗，点击下载即刻踏入《鸿禧墨魂+30》的武侠世界。</p>
+        </div>
+
+        <article class="download-client-card" aria-labelledby="windows-client-title">
+          <div class="windows-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <h2 id="windows-client-title">Windows 客户端</h2>
+          <p>为 Windows 10/11 优化，提供最完整的游戏体验。</p>
+          <a class="download-now" href="#" target="_blank" rel="noopener noreferrer" aria-label="立即下载 Windows 客户端">立即下载</a>
+          <span class="download-version">版本: v1.2.5</span>
+        </article>
+      </section>
+    </main>
+
+    <!-- Main interaction script: back-to-top support is unused here, leaf animation is shared with the site. -->
+    <script src="script.js"></script>
+  </body>
+</html>

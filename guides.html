@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <!-- Basic document settings: character encoding, responsive viewport, and SEO metadata. -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="鸿禧墨魂+30新手指南、地图总览、装备养成、PVP玩法与生活技能全攻略。">
+    <meta name="keywords" content="鸿禧墨魂+30, 鸿禧墨魂攻略, 武侠游戏, MMORPG, 新手指南, 装备指南, PVP玩法">
+    <meta name="author" content="鸿禧墨魂运营团队">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="武功秘籍 - 鸿禧墨魂+30">
+    <meta property="og:description" content="此乃江湖百晓生毕生心血，囊括万象，助君一统江湖。">
+    <meta property="og:image" content="assets/images/home-background.webp">
+    <meta property="og:type" content="website">
+    <title>武功秘籍 - 鸿禧墨魂+30</title>
+
+    <!-- Browser/app icons shown in tabs, bookmarks, and mobile home-screen shortcuts. -->
+    <link rel="icon" href="assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+
+    <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
+    <link rel="preload" href="assets/images/home-background.webp" as="image" media="(min-width: 769px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/home-background-mobile.webp" as="image" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
+
+    <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body data-current-section="guides" class="guides-standalone">
+    <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, bottom fade, and animated leaf canvas. -->
+    <div class="fixed-scene" aria-hidden="true">
+      <picture class="scene-bg">
+        <source media="(max-width: 768px)" srcset="assets/images/home-background-mobile.webp">
+        <img src="assets/images/home-background.webp" alt="" fetchpriority="high" decoding="sync">
+      </picture>
+      <div class="scene-shade"></div>
+      <div class="scene-bottom-fade"></div>
+      <canvas class="leaf-canvas" data-leaf-canvas></canvas>
+    </div>
+
+    <main>
+      <section class="guides-page-shell" aria-labelledby="guides-title">
+        <a class="guide-back-link" href="index.html#home">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M10 19 3 12l7-7m-7 7h18"></path>
+          </svg>
+          <span>返回首页</span>
+        </a>
+
+        <div data-guide-index>
+          <div class="guides-heading">
+            <h1 id="guides-title">武功秘籍</h1>
+            <p>此乃江湖百晓生毕生心血，囊括万象，助君一统江湖。</p>
+          </div>
+
+          <div class="guides-grid" aria-label="攻略分类">
+            <article class="guide-card" data-guide-card data-guide-key="map" style="--guide-delay: 0s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="m9 20-5.45-2.72A1 1 0 0 1 3 16.38V5.62a1 1 0 0 1 1.45-.9L9 7m0 13V7m0 13h6m-6 0 6-3m-6 3V7m6 10v-4.38a1 1 0 0 0-.55-.9L9 7m6 10 5.45 2.72a1 1 0 0 0 1.55-.9V8.62a1 1 0 0 0-1.45-.9L15 10m0 0H9"></path>
+                </svg>
+              </div>
+              <h2>地图总览</h2>
+              <p>各大主城、野外场景、神秘洞穴的详细地图与资源分布。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="beginner" style="--guide-delay: 0.08s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 6.25v11.5M3 12h18"></path>
+                </svg>
+              </div>
+              <h2>新手指南</h2>
+              <p>从创建角色到初识江湖，快速上手游戏的核心系统与玩法。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="advanced" style="--guide-delay: 0.16s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M13 7h8m0 0v8m0-8-8 8-4-4-6 6"></path>
+                </svg>
+              </div>
+              <h2>进阶指南</h2>
+              <p>深入了解经脉、心法、套装搭配，成为独当一面的大侠。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="pvp" style="--guide-delay: 0.24s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3Z"></path>
+                </svg>
+              </div>
+              <h2>PVP玩法</h2>
+              <p>华山论剑、跨服战场、帮会争霸，各类PVP活动的规则与技巧。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="equipment" style="--guide-delay: 0.32s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M5 3v4M3 5h4m-1 12v4m-2-2h4m5-16 2.29 6.86L21 12l-5.71 2.14L13 21l-2.29-6.86L5 12l5.71-2.14L13 3Z"></path>
+                </svg>
+              </div>
+              <h2>装备指南</h2>
+              <p>神兵、宝甲、饰品的获取途径、强化、镶嵌与传承全攻略。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="pet" style="--guide-delay: 0.4s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M14.83 14.83a4 4 0 0 1-5.66 0M9 10h.01M15 10h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                </svg>
+              </div>
+              <h2>宠物资料</h2>
+              <p>珍奇异兽的捕获地点、资质技能、以及培养与进化路线。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="life" style="--guide-delay: 0.48s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M19.43 15.43a2 2 0 0 0-1.02-.55l-2.39-.48a6 6 0 0 0-3.86.52l-.32.16a6 6 0 0 1-3.86.52l-1.93-.39a2 2 0 0 0-1.81.55M8 4h8l-1 1v5.17a2 2 0 0 0 .59 1.42l5 5c1.26 1.26.37 3.41-1.42 3.41H4.83c-1.78 0-2.67-2.15-1.41-3.41l5-5A2 2 0 0 0 9 10.17V5L8 4Z"></path>
+                </svg>
+              </div>
+              <h2>生活技能</h2>
+              <p>学习采药、挖矿、锻造、烹饪等技能，成为江湖中的能工巧匠。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+
+            <article class="guide-card" data-guide-card data-guide-key="other" style="--guide-delay: 0.56s;">
+              <div class="guide-sweep" aria-hidden="true"></div>
+              <div class="guide-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8.23 9c.55-1.17 2.03-2 3.77-2 2.21 0 4 1.34 4 3 0 1.4-1.28 2.58-3.01 2.91-.54.1-.99.54-.99 1.09m0 3h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"></path>
+                </svg>
+              </div>
+              <h2>其他</h2>
+              <p>奇遇任务、隐藏成就、江湖传闻等疑难杂症的解答。</p>
+              <span class="guide-arrow" aria-hidden="true">→</span>
+            </article>
+          </div>
+        </div>
+
+        <div class="guide-detail" data-guide-detail hidden>
+          <button class="guide-list-back" type="button" data-guide-detail-back>
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M10 19 3 12l7-7m-7 7h18"></path>
+            </svg>
+            <span>返回秘籍列表</span>
+          </button>
+
+          <header class="guide-detail-header">
+            <h1 data-guide-detail-title></h1>
+            <p data-guide-detail-description></p>
+          </header>
+
+          <article class="guide-detail-body" data-guide-detail-body></article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Main interaction script: leaf animation and shared safe page helpers. -->
+    <script src="script.js"></script>
+  </body>
+</html>
