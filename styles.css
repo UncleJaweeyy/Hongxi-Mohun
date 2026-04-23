@@ -2678,22 +2678,22 @@ td {
   }
 
   .site-header.nav-open .nav-toggle {
-    width: clamp(74px, 18vw, 92px);
-    height: clamp(64px, 16vw, 82px);
+    width: clamp(54px, 14vw, 68px);
+    height: clamp(50px, 12.5vw, 62px);
     border-color: rgba(255, 43, 43, 0.95);
     background: #bd0008;
     box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34), 0 0 24px rgba(189, 0, 8, 0.28);
   }
 
   .site-header.nav-open .nav-toggle span {
-    width: 32px;
-    height: 3px;
-    margin: 4px auto;
+    width: 24px;
+    height: 2px;
+    margin: 3px auto;
     background: #fff8ee;
   }
 
   .site-header.nav-open .nav-toggle span:nth-child(1) {
-    transform: translateY(11px) rotate(45deg);
+    transform: translateY(8px) rotate(45deg);
   }
 
   .site-header.nav-open .nav-toggle span:nth-child(2) {
@@ -2701,7 +2701,7 @@ td {
   }
 
   .site-header.nav-open .nav-toggle span:nth-child(3) {
-    transform: translateY(-11px) rotate(-45deg);
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   .site-header.nav-open .site-nav {
