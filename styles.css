@@ -2630,14 +2630,27 @@ td {
 ------------------------------------------------------------ */
 @media (max-width: 1020px) {
   .site-header {
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr auto;
     min-height: 72px;
     padding: 0.75rem clamp(1rem, 4vw, 3rem);
   }
 
   .nav-toggle {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     justify-self: end;
+    transition:
+      width 180ms ease,
+      height 180ms ease,
+      border-color 180ms ease,
+      background-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .nav-toggle span {
+    transition: transform 180ms ease, opacity 180ms ease, background-color 180ms ease;
   }
 
   .site-nav,
@@ -2654,26 +2667,80 @@ td {
     align-items: start;
     min-height: 100svh;
     grid-template-columns: 1fr auto;
-    grid-template-rows: auto auto auto;
-    background: rgba(5, 6, 7, 0.96);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    padding: max(0.95rem, env(safe-area-inset-top)) clamp(1rem, 4vw, 3rem) max(2rem, env(safe-area-inset-bottom));
+    background: rgba(5, 6, 7, 0.76);
+    overflow-y: auto;
+  }
+
+  .site-header.nav-open .brand {
+    visibility: hidden;
+  }
+
+  .site-header.nav-open .nav-toggle {
+    width: clamp(74px, 18vw, 92px);
+    height: clamp(64px, 16vw, 82px);
+    border-color: rgba(255, 43, 43, 0.95);
+    background: #bd0008;
+    box-shadow: 0 16px 42px rgba(0, 0, 0, 0.34), 0 0 24px rgba(189, 0, 8, 0.28);
+  }
+
+  .site-header.nav-open .nav-toggle span {
+    width: 32px;
+    height: 3px;
+    margin: 4px auto;
+    background: #fff8ee;
+  }
+
+  .site-header.nav-open .nav-toggle span:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+  }
+
+  .site-header.nav-open .nav-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .site-header.nav-open .nav-toggle span:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
   }
 
   .site-header.nav-open .site-nav {
     grid-column: 1 / -1;
+    align-self: center;
+    justify-self: center;
     flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    padding-top: 1rem;
-    font-size: 1.35rem;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(0.6rem, 2.2vh, 1.05rem);
+    width: min(18rem, 100%);
+    padding: clamp(1rem, 3vh, 2rem) 0;
+    color: rgba(255, 255, 255, 0.94);
+    font-size: clamp(1.55rem, 5.6vw, 2.15rem);
+    line-height: 1.2;
+    text-align: center;
   }
 
   .site-header.nav-open .site-nav a {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(229, 213, 166, 0.12);
+    display: inline-flex;
+    justify-content: center;
+    width: max-content;
+    padding: 0.12rem 0.35rem;
+    border-bottom: 0;
   }
 
   .site-header.nav-open .auth-actions {
     grid-column: 1 / -1;
+    justify-content: center;
+    gap: clamp(1rem, 6vw, 2.25rem);
+    padding-bottom: clamp(1.5rem, 7vh, 4rem);
+  }
+
+  .site-header.nav-open .auth-actions button {
+    min-width: clamp(122px, 32vw, 168px);
+    min-height: 58px;
+    border-width: 2px;
+    font-size: clamp(1.15rem, 4.6vw, 1.5rem);
+    background: rgba(0, 0, 0, 0.22);
   }
 
   .hero-lines {

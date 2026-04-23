@@ -423,6 +423,7 @@ function closeNav() {
   document.body.classList.remove("nav-open");
   header?.classList.remove("nav-open");
   navToggle?.setAttribute("aria-expanded", "false");
+  navToggle?.setAttribute("aria-label", "打开导航");
 }
 
 // Shows exactly one page-view section based on its data-page value.
@@ -839,6 +840,7 @@ navToggle?.addEventListener("click", () => {
   const isOpen = header?.classList.toggle("nav-open");
   document.body.classList.toggle("nav-open", isOpen);
   navToggle.setAttribute("aria-expanded", String(isOpen));
+  navToggle.setAttribute("aria-label", isOpen ? "关闭导航" : "打开导航");
 });
 
 // Clicking a nav link closes the mobile menu after navigation begins.
