@@ -23,7 +23,8 @@
     <link rel="preload" href="assets/images/title_logo/big_cloud.png" as="image" type="image/png" fetchpriority="high">
     <link rel="preload" href="assets/images/title_logo/small_cloud.png" as="image" type="image/png" fetchpriority="high">
     <link rel="preload" href="assets/images/title_logo/title_logo.png" as="image" type="image/png" fetchpriority="high">
-    <link rel="preload" href="assets/images/background_image.png" as="image" type="image/png" fetchpriority="high">
+    <link rel="preload" href="assets/images/background_image.png" as="image" type="image/png" media="(min-width: 681px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/background_image_mobile.png" as="image" type="image/png" media="(max-width: 680px)" fetchpriority="high">
     <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
@@ -33,6 +34,7 @@
     <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, and animated leaf canvas. -->
     <div class="fixed-scene" aria-hidden="true">
       <picture class="scene-bg">
+        <source media="(max-width: 680px)" srcset="assets/images/background_image_mobile.png">
         <img src="assets/images/background_image.png" alt="" fetchpriority="high" decoding="sync">
       </picture>
       <div class="scene-shade"></div>
