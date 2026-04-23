@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="武功秘籍 - 鸿禧墨魂+30">
     <meta property="og:description" content="此乃江湖百晓生毕生心血，囊括万象，助君一统江湖。">
-    <meta property="og:image" content="assets/images/home-background.webp">
+    <meta property="og:image" content="assets/images/background_image.png">
     <meta property="og:type" content="website">
     <title>武功秘籍 - 鸿禧墨魂+30</title>
 
@@ -20,8 +20,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
 
     <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
-    <link rel="preload" href="assets/images/home-background.webp" as="image" media="(min-width: 769px)" fetchpriority="high">
-    <link rel="preload" href="assets/images/home-background-mobile.webp" as="image" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/background_image.png" as="image" type="image/png" fetchpriority="high">
     <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
@@ -31,8 +30,7 @@
     <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, bottom fade, and animated leaf canvas. -->
     <div class="fixed-scene" aria-hidden="true">
       <picture class="scene-bg">
-        <source media="(max-width: 768px)" srcset="assets/images/home-background-mobile.webp">
-        <img src="assets/images/home-background.webp" alt="" fetchpriority="high" decoding="sync">
+        <img src="assets/images/background_image.png" alt="" fetchpriority="high" decoding="sync">
       </picture>
       <div class="scene-shade"></div>
       <div class="scene-bottom-fade"></div>

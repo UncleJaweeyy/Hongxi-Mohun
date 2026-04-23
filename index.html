@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="鸿禧墨魂+30">
     <meta property="og:description" content="江湖无界，一世墨魂。立即加入，开启你的武侠征途。">
-    <meta property="og:image" content="assets/images/home-background.webp">
+    <meta property="og:image" content="assets/images/background_image.png">
     <meta property="og:type" content="website">
     <title>鸿禧墨魂+30</title>
 
@@ -20,9 +20,10 @@
     <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
 
     <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
-    <link rel="preload" href="assets/images/logo-title.svg" as="image" type="image/svg+xml" fetchpriority="high">
-    <link rel="preload" href="assets/images/home-background.webp" as="image" media="(min-width: 769px)" fetchpriority="high">
-    <link rel="preload" href="assets/images/home-background-mobile.webp" as="image" media="(max-width: 768px)" fetchpriority="high">
+    <link rel="preload" href="assets/images/title_logo/big_cloud.png" as="image" type="image/png" fetchpriority="high">
+    <link rel="preload" href="assets/images/title_logo/small_cloud.png" as="image" type="image/png" fetchpriority="high">
+    <link rel="preload" href="assets/images/title_logo/title_logo.png" as="image" type="image/png" fetchpriority="high">
+    <link rel="preload" href="assets/images/background_image.png" as="image" type="image/png" fetchpriority="high">
     <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
@@ -32,8 +33,7 @@
     <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, and animated leaf canvas. -->
     <div class="fixed-scene" aria-hidden="true">
       <picture class="scene-bg">
-        <source media="(max-width: 768px)" srcset="assets/images/home-background-mobile.webp">
-        <img src="assets/images/home-background.webp" alt="" fetchpriority="high" decoding="sync">
+        <img src="assets/images/background_image.png" alt="" fetchpriority="high" decoding="sync">
       </picture>
       <div class="scene-shade"></div>
       <div class="scene-bottom-fade"></div>
@@ -85,8 +85,12 @@
           </div>
           <div class="hero-content">
             <h1>鸿禧墨魂+30</h1>
-            <span class="hero-logo-wrap">
-              <img class="hero-logo" src="assets/images/logo-title.svg" alt="鸿禧墨魂+30">
+            <span class="hero-logo-wrap" role="img" aria-label="鸿禧墨魂+30" data-hero-logo>
+              <img class="hero-logo-layer hero-logo-layer--big-cloud" src="assets/images/title_logo/big_cloud.png" alt="" aria-hidden="true" decoding="async">
+              <img class="hero-logo-layer hero-logo-layer--small-cloud" src="assets/images/title_logo/small_cloud.png" alt="" aria-hidden="true" decoding="async">
+              <span class="hero-logo-layer hero-logo-layer--title" aria-hidden="true">
+                <img src="assets/images/title_logo/title_logo.png" alt="" decoding="async">
+              </span>
             </span>
             <p class="hero-title">江湖无界，一世墨魂</p>
             <a class="hero-button" href="download.html"><span>开始征途</span></a>
@@ -203,23 +207,23 @@
               </svg>
             </button>
             <div class="gallery-track">
-              <article class="gallery-slide is-active" data-gallery-slide style="--gallery-image: url('assets/images/home-background.webp');">
+              <article class="gallery-slide is-active" data-gallery-slide style="--gallery-image: url('assets/images/mountain_gate.png');">
                 <span>山门</span>
                 <h3>云海栈道</h3>
               </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1542587222-f9172e5efa63?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/martial_world.png');">
                 <span>江湖</span>
                 <h3>古镇烟雨</h3>
               </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1536924940846-227afb31e2a5?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/mountains_rivers.png');">
                 <span>山水</span>
                 <h3>万壑听松</h3>
               </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1620259228303-a8f0835b5958?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/secret_realm.png');">
                 <span>秘境</span>
                 <h3>幽谷问剑</h3>
               </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('https://images.unsplash.com/photo-1519791883288-dc8bd696e667?q=80&amp;w=1200&amp;auto=format&amp;fit=crop');">
+              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/city.png');">
                 <span>城池</span>
                 <h3>夜火连营</h3>
               </article>

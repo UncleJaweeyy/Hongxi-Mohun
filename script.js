@@ -146,6 +146,50 @@ const authCopy = {
 };
 const authSecurityMessage = "安全验证加载超时，请检查网络连接";
 
+// Replays the layered title logo entrance whenever the hero scrolls back in.
+function initHeroLogoAnimation() {
+  const hero = document.querySelector("#home");
+  const logo = document.querySelector("[data-hero-logo]");
+  if (!hero || !logo) return;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (reducedMotion.matches) return;
+
+  function play(delay = 0) {
+    window.setTimeout(() => {
+      logo.classList.remove("is-animating");
+      void logo.offsetWidth;
+      logo.classList.add("is-animating");
+    }, delay);
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    play(900);
+    return;
+  }
+
+  let wasVisible = false;
+  let isFirstEntry = true;
+
+  const observer = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    const isVisible = entry.isIntersecting && entry.intersectionRatio >= 0.35;
+
+    if (isVisible && !wasVisible) {
+      play(isFirstEntry ? 900 : 0);
+      isFirstEntry = false;
+    }
+
+    if (!isVisible && wasVisible) {
+      logo.classList.remove("is-animating");
+    }
+
+    wasVisible = isVisible;
+  }, { threshold: [0, 0.35, 0.65] });
+
+  observer.observe(hero);
+}
+
 // ------------------------------------------------------------
 // Falling leaves canvas
 // ------------------------------------------------------------
@@ -1373,7 +1417,8 @@ window.addEventListener("hashchange", navigate);
 // 4. initialize gallery controls
 // 5. initialize feature scroll reveal
 // 6. initialize one-shot running borders
-// 7. start leaf animation
+// 7. initialize the layered hero logo entrance
+// 8. start leaf animation
 window.addEventListener("DOMContentLoaded", () => {
   navigate();
   renderRank();
@@ -1381,5 +1426,6 @@ window.addEventListener("DOMContentLoaded", () => {
   initGallery();
   initFeatureReveal();
   initRunningBorders();
+  initHeroLogoAnimation();
   initLeafCanvas();
 });
