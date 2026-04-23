@@ -2711,8 +2711,8 @@ td {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0;
-    width: min(30rem, 100%);
+    gap: clamp(0.6rem, 2.2vh, 1.05rem);
+    width: min(18rem, 100%);
     padding: clamp(1rem, 3vh, 2rem) 0;
     color: rgba(255, 255, 255, 0.94);
     font-size: clamp(1.55rem, 5.6vw, 2.15rem);
@@ -2723,14 +2723,9 @@ td {
   .site-header.nav-open .site-nav a {
     display: inline-flex;
     justify-content: center;
-    width: 100%;
-    padding: clamp(0.48rem, 1.65vh, 0.78rem) 0.35rem;
-    border-bottom: 1px solid rgba(229, 213, 166, 0.16);
-  }
-
-  .site-header.nav-open .site-nav a:first-child,
-  .site-header.nav-open .site-nav a.is-active {
-    border-bottom-color: rgba(216, 177, 92, 0.78);
+    width: max-content;
+    padding: 0.12rem 0.35rem;
+    border-bottom: 0;
   }
 
   .site-header.nav-open .auth-actions {
