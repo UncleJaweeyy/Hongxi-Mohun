@@ -36,6 +36,8 @@
   --section-block-gap: clamp(2rem, 5.5vw, 4.5rem);
   --section-inner-pad: clamp(2rem, 5vw, 4.25rem);
   --numeric-font: "Noto Sans", Arial, sans-serif;
+  --cursor-default: url("assets/cursors/normal_hover_pointer_large.png") 12 12, auto;
+  --cursor-clickable: url("assets/cursors/clickable_hover_pointer_large.png") 12 12, pointer;
 }
 
 /* ------------------------------------------------------------
@@ -48,6 +50,7 @@
 
 html {
   scroll-behavior: smooth;
+  cursor: var(--cursor-default);
 }
 
 body {
@@ -56,6 +59,7 @@ body {
   color: var(--text);
   font-family: "Ma Shan Zheng", serif;
   line-height: 1.6;
+  cursor: var(--cursor-default);
 }
 
 body.modal-open {
@@ -73,6 +77,20 @@ a {
 
 button {
   font: inherit;
+}
+
+a,
+button,
+summary,
+select,
+label[for],
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+[type="checkbox"],
+[type="radio"] {
+  cursor: var(--cursor-clickable);
 }
 
 /* ------------------------------------------------------------
