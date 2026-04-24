@@ -351,7 +351,7 @@ main {
   border: 1px solid rgba(180, 18, 25, 0.78);
   color: #7f1015;
   background: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
 }
 
 .auth-actions button {
@@ -990,7 +990,7 @@ main {
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.035);
   color: var(--muted);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
 }
 
 .segmented-control button.is-active,
@@ -1466,7 +1466,7 @@ td {
   padding: 1.25rem clamp(1rem, 3vw, 1.6rem);
   border-color: rgba(244, 239, 225, 0.08);
   background: rgba(5, 6, 7, 0.32);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
 }
 
 .news-page-shell .news-card.is-hidden {
@@ -1730,7 +1730,7 @@ td {
     rgba(17, 24, 39, 0.66);
   box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
   overflow: hidden;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   animation: guide-breathe 5.6s ease-in-out infinite;
   animation-delay: var(--guide-delay, 0s);
   transition: transform 260ms ease, border-color 260ms ease, background 260ms ease, box-shadow 260ms ease;
@@ -1876,7 +1876,7 @@ td {
   background: rgba(17, 24, 39, 0.9);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(8px);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   font-size: 1.08rem;
   font-weight: 900;
   transition: border-color 220ms ease, background 220ms ease, color 220ms ease, box-shadow 220ms ease;
@@ -2266,7 +2266,7 @@ td {
   color: #ff4d45;
   background: rgba(5, 6, 7, 0.62);
   box-shadow: inset 0 0 18px rgba(183, 56, 45, 0.16), 0 0 18px rgba(0, 0, 0, 0.35);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   opacity: 0;
   transform: translateY(14px);
   pointer-events: none;
@@ -2382,7 +2382,7 @@ td {
   border: 0;
   color: rgba(216, 177, 92, 0.78);
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   font-family: var(--numeric-font);
   font-size: 1.9rem;
   line-height: 1;
@@ -2528,7 +2528,7 @@ td {
   border-radius: 0 var(--auth-field-radius) var(--auth-field-radius) 0;
   color: rgba(216, 177, 92, 0.78);
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   transition: color 180ms ease;
 }
 
@@ -2561,7 +2561,7 @@ td {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
 }
 
 .remember-field input {
@@ -2591,7 +2591,7 @@ td {
   font-size: 1.1rem;
   font-weight: 900;
   letter-spacing: 0.22em;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   isolation: isolate;
   animation: title-shine 3.8s linear infinite;
   transition: border-color 220ms ease, box-shadow 220ms ease, transform 220ms ease, background-color 220ms ease;
@@ -2637,7 +2637,7 @@ td {
   border: 0;
   color: #5bb1a8;
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   font: inherit;
   font-weight: 900;
   transition: color 180ms ease;
@@ -3826,7 +3826,7 @@ td {
   color: #ffe6a1;
   background: rgba(5, 6, 7, 0.82);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.42), 0 0 18px rgba(216, 177, 92, 0.24);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   font-size: 0;
   line-height: 0;
   transform: translateY(-50%);
@@ -3885,7 +3885,7 @@ td {
   border-radius: 50%;
   background: rgba(216, 177, 92, 0.12);
   box-shadow: 0 0 10px rgba(216, 177, 92, 0.18);
-  cursor: pointer;
+  cursor: var(--cursor-clickable);
   transition: width 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
