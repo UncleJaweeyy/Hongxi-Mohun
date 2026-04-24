@@ -1,7 +1,9 @@
+import { initClickSound } from '../shared/click-sound.js';
 import { initLeafCanvas } from '../shared/leaf-canvas.js';
 import { initGuidesPage } from '../pages/guides.js';
 
-function bootGuidesPage() {
+async function bootGuidesPage() {
+  await initClickSound();
   initGuidesPage();
   initLeafCanvas();
 }

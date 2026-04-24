@@ -2,8 +2,10 @@ import { loadSectionIncludes } from './shared/section-loader.js';
 import { initNavigation } from './shared/navigation.js';
 import { initAuth } from './shared/auth.js';
 import { initBackTop } from './shared/back-top.js';
+import { initClickSound } from './shared/click-sound.js';
 import { initLeafCanvas } from './shared/leaf-canvas.js';
 import { initRunningBorders } from './shared/running-borders.js';
+import { initBackgroundMusic } from './shared/background-music.js';
 import { initHeroLogoAnimation } from './home/hero-logo.js';
 import { initRanking } from './home/ranking.js';
 import { initClassShowcase } from './home/classes.js';
@@ -93,6 +95,9 @@ async function boot() {
   await loadSectionIncludes(({ completed, total }) => {
     loader.setProgress(10 + ((completed / total) * 50));
   });
+
+  await initClickSound();
+  await initBackgroundMusic();
 
   const initializers = [
     initNavigation,

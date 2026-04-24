@@ -1,10 +1,12 @@
 import { initNavigation } from '../shared/navigation.js';
 import { initAuth } from '../shared/auth.js';
 import { initBackTop } from '../shared/back-top.js';
+import { initClickSound } from '../shared/click-sound.js';
 import { initLeafCanvas } from '../shared/leaf-canvas.js';
 import { initNewsPage } from '../pages/news.js';
 
-function bootNewsPage() {
+async function bootNewsPage() {
+  await initClickSound();
   initNavigation();
   initAuth();
   initBackTop();

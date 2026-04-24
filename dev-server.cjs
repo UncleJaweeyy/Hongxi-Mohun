@@ -12,6 +12,7 @@ const types = {
   ".webp": "image/webp",
   ".png": "image/png",
   ".ico": "image/x-icon",
+  ".mp3": "audio/mpeg",
   ".woff2": "font/woff2",
   ".svg": "image/svg+xml"
 };
