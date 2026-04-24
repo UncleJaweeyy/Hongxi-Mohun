@@ -42,9 +42,9 @@
       <canvas class="leaf-canvas" data-leaf-canvas></canvas>
     </div>
 
-    <!-- Loading overlay: appears briefly while the page enters, then fades out through CSS animation. -->
+    <!-- Loading overlay: tracks startup progress, then fades out after initialization finishes. -->
     <div class="loading-screen" data-loader aria-hidden="true">
-      <div class="loading-ring"><span>100%</span></div>
+      <div class="loading-ring" style="--progress: 0;"><span>0%</span></div>
       <p>正在凝聚武魂...</p>
     </div>
 

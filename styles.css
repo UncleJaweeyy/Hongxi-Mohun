@@ -177,8 +177,15 @@ main {
   gap: 1.1rem;
   background: rgba(5, 5, 5, 0.76);
   backdrop-filter: blur(2px);
-  animation: loader-out 650ms ease 1150ms forwards;
   pointer-events: none;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 650ms ease, visibility 650ms ease;
+}
+
+.loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .loading-screen p {
@@ -189,6 +196,7 @@ main {
 }
 
 .loading-ring {
+  position: relative;
   display: grid;
   place-items: center;
   width: 92px;
@@ -198,8 +206,13 @@ main {
   font-weight: 900;
   background:
     radial-gradient(circle, rgba(0, 0, 0, 0.78) 0 52%, transparent 53%),
-    conic-gradient(#d92431 0 52%, #f0a000 52% 100%);
+    conic-gradient(
+      #d92431 0 calc(var(--progress, 0) * 0.52%),
+      #f0a000 calc(var(--progress, 0) * 0.52%) calc(var(--progress, 0) * 1%),
+      rgba(255, 255, 255, 0.08) calc(var(--progress, 0) * 1%) 100%
+    );
   box-shadow: 0 0 34px rgba(217, 36, 49, 0.35);
+  transition: background 180ms linear;
 }
 
 .loading-ring::before {
@@ -215,13 +228,6 @@ main {
 .loading-ring span {
   position: relative;
   z-index: 1;
-}
-
-@keyframes loader-out {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
 }
 
 @keyframes spin {
