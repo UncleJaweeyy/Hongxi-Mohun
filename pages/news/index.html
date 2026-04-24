@@ -10,28 +10,27 @@
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="江湖快报 - 鸿禧墨魂+30">
     <meta property="og:description" content="网罗江湖大小事，天下风云出我辈。">
-    <meta property="og:image" content="assets/images/background_image.webp">
+    <meta property="og:image" content="../../assets/images/background_image.webp">
     <meta property="og:type" content="website">
     <title>江湖快报 - 鸿禧墨魂+30</title>
 
     <!-- Browser/app icons shown in tabs, bookmarks, and mobile home-screen shortcuts. -->
-    <link rel="icon" href="assets/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="assets/android-chrome-192x192.png">
+    <link rel="icon" href="../../assets/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../../assets/android-chrome-192x192.png">
 
     <!-- Performance preloads for above-the-fold images and the custom calligraphy font. -->
-    <link rel="preload" href="assets/images/logo-title.svg" as="image" type="image/svg+xml" fetchpriority="high">
-    <link rel="preload" href="assets/images/background_image.webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="preload" href="assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="../../assets/images/background_image.webp" as="image" type="image/webp" fetchpriority="high">
+    <link rel="preload" href="../../assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Main stylesheet for all layout, animation, and responsive behavior. -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../styles.css">
   </head>
   <body data-current-section="news">
     <!-- Fixed scene background: the always-visible mountain artwork, dark overlays, and animated leaf canvas. -->
     <div class="fixed-scene" aria-hidden="true">
       <picture class="scene-bg">
-        <img src="assets/images/background_image.webp" alt="" fetchpriority="high" decoding="sync">
+        <img src="../../assets/images/background_image.webp" alt="" fetchpriority="high" decoding="sync">
       </picture>
       <div class="scene-shade"></div>
       <div class="scene-bottom-fade"></div>
@@ -40,7 +39,7 @@
 
     <!-- Site header: brand mark, main navigation, mobile menu toggle, and account buttons. -->
     <header class="site-header" data-header>
-      <a class="brand" href="index.html#home" aria-label="返回首页">
+      <a class="brand" href="../../index.html#home" aria-label="返回首页">
         <span class="brand-mark">墨</span>
         <span class="brand-name">鸿禧墨魂+30</span>
       </a>
@@ -50,15 +49,15 @@
         <span></span>
       </button>
       <nav class="site-nav" aria-label="主导航" data-nav>
-        <a href="index.html#home">首页</a>
-        <a href="index.html#features">特色</a>
-        <a href="index.html#rank">龙虎榜</a>
-        <a href="index.html#classes">流派</a>
-        <a href="index.html#gallery">绘卷</a>
-        <a href="news.html" class="is-active">风云</a>
-        <a href="index.html#community">社群</a>
-        <a href="guides.html">攻略</a>
-        <a href="download.html">下载</a>
+        <a href="../../index.html#home">首页</a>
+        <a href="../../index.html#features">特色</a>
+        <a href="../../index.html#rank">龙虎榜</a>
+        <a href="../../index.html#classes">流派</a>
+        <a href="../../index.html#gallery">绘卷</a>
+        <a href="../news/" class="is-active">风云</a>
+        <a href="../../index.html#community">社群</a>
+        <a href="../guides/">攻略</a>
+        <a href="../download/">下载</a>
       </nav>
       <div class="auth-actions" aria-label="账号操作">
         <button type="button" data-auth-open="login">登录</button>
@@ -69,7 +68,7 @@
     <main>
       <section class="sub-page news-page-shell" aria-labelledby="news-page-title">
         <div data-news-index>
-          <a class="back-link news-back-link" href="index.html#home">
+          <a class="back-link news-back-link" href="../../index.html#home">
             <svg aria-hidden="true" viewBox="0 0 24 24">
               <path d="M10 19 3 12l7-7m-7 7h18"></path>
             </svg>
@@ -292,6 +291,6 @@
     </div>
 
     <!-- Main interaction script: navigation, modals, news filters, and leaf animation. -->
-    <script type="module" src="js/app.js"></script>
+    <script type="module" src="../../js/entries/news.js"></script>
   </body>
 </html>

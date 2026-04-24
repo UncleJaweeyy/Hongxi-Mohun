@@ -30,9 +30,9 @@ export function initNavigation() {
     const href = link.getAttribute('href') || '';
     const hashIndex = href.indexOf('#');
 
-    if (href.endsWith('news.html')) return 'news';
-    if (href.endsWith('guides.html')) return 'guides';
-    if (href.endsWith('download.html')) return 'download';
+    if (/\/news\/?(index\.html)?$/i.test(href) || href.endsWith('news.html')) return 'news';
+    if (/\/guides\/?(index\.html)?$/i.test(href) || href.endsWith('guides.html')) return 'guides';
+    if (/\/download\/?(index\.html)?$/i.test(href) || href.endsWith('download.html')) return 'download';
     if (hashIndex >= 0) return href.slice(hashIndex + 1);
     return href.replace(/\.html$/, '');
   }
