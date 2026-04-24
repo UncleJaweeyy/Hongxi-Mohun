@@ -77,217 +77,18 @@
     </header>
 
     <main>
-      <!-- Homepage view: this stays visible for normal anchor sections like #home, #features, and #rank. -->
+      <!-- Homepage sections are loaded from sections/home/*.html for easier maintenance. -->
       <div class="page-view is-active" data-page="home">
-        <!-- Hero section: first screen with logo, tagline, call-to-action, and vertical poem text. -->
-        <section class="hero" id="home">
-          <div class="hero-lines" aria-hidden="true">
-            <span>一剑光寒十四州</span>
-            <span>剑气纵横三万里</span>
-          </div>
-          <div class="hero-content">
-            <h1>鸿禧墨魂+30</h1>
-            <span class="hero-logo-wrap" role="img" aria-label="鸿禧墨魂+30" data-hero-logo>
-              <img class="hero-logo-layer hero-logo-layer--big-cloud" src="assets/images/title_logo/big_cloud.webp" alt="" aria-hidden="true" decoding="async">
-              <img class="hero-logo-layer hero-logo-layer--small-cloud" src="assets/images/title_logo/small_cloud.webp" alt="" aria-hidden="true" decoding="async">
-              <span class="hero-logo-layer hero-logo-layer--title" aria-hidden="true">
-                <img src="assets/images/title_logo/title_logo.webp" alt="" decoding="async">
-              </span>
-            </span>
-            <p class="hero-title">江湖无界，一世墨魂</p>
-            <a class="hero-button" href="download.html"><span>开始征途</span></a>
-          </div>
-        </section>
-
-        <!-- Features section: three alternating showcase panels for weapons, costumes, and martial arts. -->
-        <section class="section feature-showcase" id="features">
-          <div class="section-heading">
-            <h2>刀光剑影，皆成传说</h2>
-            <p>从神兵、时装到绝学，每一次成长都能被看见。</p>
-          </div>
-          <div class="feature-story">
-            <article class="feature-item">
-              <figure class="feature-visual feature-visual--weapon" aria-label="神兵套装">
-                <span class="feature-glyph">兵</span>
-              </figure>
-              <div class="feature-copy">
-                <h3>神兵套装</h3>
-                <p>铸造传说中的神兵，激活独特的套装效果。外观与实力同步飞升，成为江湖中令人敬畏的存在。</p>
-              </div>
-            </article>
-            <article class="feature-item feature-item--reverse">
-              <figure class="feature-visual feature-visual--costume" aria-label="酷炫时装">
-                <span class="feature-glyph">裳</span>
-              </figure>
-              <div class="feature-copy">
-                <h3>酷炫时装</h3>
-                <p>收集千百种华丽服饰与武器幻化，定制独一无二的专属造型。流光溢彩的武器特效，让拔剑瞬间惊艳整个江湖。</p>
-              </div>
-            </article>
-            <article class="feature-item">
-              <figure class="feature-visual feature-visual--skill" aria-label="绝世武学">
-                <span class="feature-glyph">武</span>
-              </figure>
-              <div class="feature-copy">
-                <h3>绝世武学</h3>
-                <p>探索失传的武学秘籍，修炼独步天下的盖世神功。每种武学皆有不同套路，相生相克，策略无穷。</p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Ranking section: interactive leaderboard; script.js fills #rank-body when tabs are clicked. -->
-        <section class="section framed-section ranking-section" id="rank">
-          <div class="section-heading">
-            <h2>风云龙虎榜</h2>
-          </div>
-          <div class="rank-shell">
-            <div class="segmented-control rank-tabs" role="tablist" aria-label="龙虎榜分类">
-              <button type="button" class="is-active" data-rank-tab="世界头目">世界头目</button>
-              <button type="button" data-rank-tab="副本榜单">副本榜单</button>
-              <button type="button" data-rank-tab="杀戮战场">杀戮战场</button>
-              <button type="button" data-rank-tab="攻城争霸">攻城争霸</button>
-            </div>
-            <div class="rank-list" aria-live="polite">
-              <div class="rank-header" role="row">
-                <span>排名</span>
-                <span>豪侠</span>
-                <span>流派</span>
-                <span>战力/积分</span>
-              </div>
-              <div id="rank-body" class="rank-body"></div>
-              <div class="empty-panel" data-rank-empty>榜单暂未开放</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Class section: weapon tabs update the large class panel through renderClassPanel() in script.js. -->
-        <section class="section framed-section class-section" id="classes">
-          <div class="section-heading">
-            <h2>天下流派</h2>
-          </div>
-          <div class="class-layout">
-            <div class="weapon-tabs" role="tablist" aria-label="流派武器" data-class-tabs>
-              <button type="button" class="is-active" data-class="sword"><strong>剑</strong><span>剑宗</span></button>
-              <button type="button" data-class="blade"><strong>刀</strong><span>霸刀</span></button>
-              <button type="button" data-class="spear"><strong>枪</strong><span>神机</span></button>
-              <button type="button" data-class="fist"><strong>拳</strong><span>罗汉</span></button>
-              <button type="button" data-class="bow"><strong>弓</strong><span>飞羽</span></button>
-              <button type="button" data-class="dagger"><strong>刺</strong><span>暗影</span></button>
-            </div>
-            <article class="class-panel" data-class-panel data-cursor="sword">
-              <div class="class-backdrop" aria-hidden="true"></div>
-              <div class="class-watermark">剑宗</div>
-              <div class="class-content">
-                <div class="class-title-row">
-                  <h3>剑宗</h3>
-                  <span>【 剑 】</span>
-                </div>
-                <div class="class-tags">
-                  <span>近战</span>
-                  <span>爆发</span>
-                  <span>突进</span>
-                  <span class="class-stars" aria-label="上手难度四星">★★★★<i>★</i></span>
-                </div>
-                <blockquote>「十步杀一人，千里不留行。」</blockquote>
-                <p>剑宗弟子修习无上剑意，剑法轻灵飘逸，动若脱兔。以极致的爆发和身法斩敌于瞬息之间，是战场上最锐利的锋芒。</p>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Gallery section: coverflow-style image carousel controlled by data-gallery buttons in script.js. -->
-        <section class="section framed-section gallery-section" id="gallery">
-          <div class="section-heading">
-            <h2>水墨绘卷</h2>
-            <p>一剑霜寒十四州，尽览江湖风物</p>
-          </div>
-          <div class="gallery-carousel" data-gallery aria-label="游戏图集">
-            <button class="gallery-nav gallery-nav--prev" type="button" aria-label="上一张" data-gallery-prev>
-              <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-                <path d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            <div class="gallery-track">
-              <article class="gallery-slide is-active" data-gallery-slide style="--gallery-image: url('assets/images/mountain_gate.webp');">
-                <span>山门</span>
-                <h3>云海栈道</h3>
-              </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/martial_world.webp');">
-                <span>江湖</span>
-                <h3>古镇烟雨</h3>
-              </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/mountains_rivers.webp');">
-                <span>山水</span>
-                <h3>万壑听松</h3>
-              </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/secret_realm.webp');">
-                <span>秘境</span>
-                <h3>幽谷问剑</h3>
-              </article>
-              <article class="gallery-slide" data-gallery-slide style="--gallery-image: url('assets/images/city.webp');">
-                <span>城池</span>
-                <h3>夜火连营</h3>
-              </article>
-            </div>
-            <button class="gallery-nav gallery-nav--next" type="button" aria-label="下一张" data-gallery-next>
-              <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
-                <path d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
-            <div class="gallery-dots" data-gallery-dots aria-label="选择图集页"></div>
-          </div>
-        </section>
-
-        <!-- News teaser section: compact homepage list that links to the full news page. -->
-        <section class="section framed-section news-teaser" id="news">
-          <div class="section-heading">
-            <h2>江湖快报</h2>
-            <p>武林风云变幻，最新动态尽在此处</p>
-          </div>
-          <div class="news-list news-list--teaser" aria-label="最新江湖快报">
-            <article class="news-card news-list-item" data-news-card data-category="公告">
-              <span>公告</span>
-              <h3>《鸿禧墨魂+30》V1.2.5版本更新维护公告</h3>
-              <time datetime="2026-04-06">2026-04-06</time>
-            </article>
-            <article class="news-card news-list-item" data-news-card data-category="活动">
-              <span>活动</span>
-              <h3>“龙争虎斗”天下第一武道会火热报名中</h3>
-              <time datetime="2026-03-25">2026-03-25</time>
-            </article>
-            <article class="news-card news-list-item" data-news-card data-category="公告">
-              <span>公告</span>
-              <h3>关于近期利用游戏BUG非法获利账号的处罚公告</h3>
-              <time datetime="2026-03-22">2026-03-22</time>
-            </article>
-            <article class="news-card news-list-item" data-news-card data-category="活动">
-              <span>活动</span>
-              <h3>清明踏青活动上线，限定时装“青团”等你来拿</h3>
-              <time datetime="2026-03-20">2026-03-20</time>
-            </article>
-          </div>
-          <a class="section-button news-button" href="news.html">尽览江湖风云</a>
-        </section>
-
-        <!-- Community section: Discord call-to-action with glowing framed presentation. -->
-        <section class="section framed-section community" id="community">
-          <div class="community-halo" aria-hidden="true"></div>
-          <div class="community-copy">
-            <h2>江湖路远，不再孤单</h2>
-            <p>立即加入我们的官方社群，与万千侠客一同交流心得、组队开荒，获取第一手游戏资讯与专属福利。</p>
-          </div>
-          <a class="discord-button" href="https://discord.com/" target="_blank" rel="noreferrer">
-            <svg aria-hidden="true" viewBox="0 0 127.14 96.36">
-              <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.31,46,96.2,53,91.08,65.69,84.69,65.69Z"></path>
-            </svg>
-            <span>加入 DISCORD 社群</span>
-          </a>
-        </section>
+        <div data-include="sections/home/hero.html"></div>
+        <div data-include="sections/home/features.html"></div>
+        <div data-include="sections/home/ranking.html"></div>
+        <div data-include="sections/home/classes.html"></div>
+        <div data-include="sections/home/gallery.html"></div>
+        <div data-include="sections/home/news-teaser.html"></div>
+        <div data-include="sections/home/community.html"></div>
       </div>
 
     </main>
-
     <!-- Site footer: legal links, brand signature, copyright, and rating notice. -->
     <footer class="site-footer">
       <div class="footer-inner">
@@ -307,7 +108,7 @@
       </div>
     </footer>
 
-    <!-- Floating back-to-top button; script.js reveals it after scrolling. -->
+    <!-- Floating back-to-top button; js/shared/back-top.js reveals it after scrolling. -->
     <button class="back-top" type="button" aria-label="返回顶部" data-back-top>⌃</button>
 
     <!-- Auth modal: one dialog containing login, register, and forgot-password forms. -->
@@ -408,7 +209,7 @@
       </div>
     </div>
 
-    <!-- Main interaction script: navigation, modals, rankings, class tabs, gallery, and leaf animation. -->
-    <script src="script.js"></script>
+    <!-- Module entrypoint: loads section fragments, then initializes shared and page-specific behavior. -->
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
