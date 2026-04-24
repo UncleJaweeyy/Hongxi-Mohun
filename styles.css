@@ -102,9 +102,9 @@ button {
   inset: -8vh -22vw;
   opacity: 0.38;
   background:
-    url("assets/images/cloud.png") 4% 16% / min(720px, 58vw) auto no-repeat,
-    url("assets/images/cloud.png") 58% 8% / min(640px, 50vw) auto no-repeat,
-    url("assets/images/cloud.png") 96% 28% / min(760px, 62vw) auto no-repeat;
+    url("assets/images/cloud.webp") 4% 16% / min(720px, 58vw) auto no-repeat,
+    url("assets/images/cloud.webp") 58% 8% / min(640px, 50vw) auto no-repeat,
+    url("assets/images/cloud.webp") 96% 28% / min(760px, 62vw) auto no-repeat;
   filter: saturate(0.86) brightness(1.08) drop-shadow(0 0 28px rgba(255, 231, 170, 0.18));
   mix-blend-mode: screen;
   transform: translate3d(-5vw, 0, 0);
@@ -116,9 +116,9 @@ button {
   inset: -4vh -24vw;
   opacity: 0.42;
   background:
-    url("assets/images/cloud2.png") 10% 68% / min(780px, 66vw) auto no-repeat,
-    url("assets/images/cloud2.png") 52% 58% / min(700px, 58vw) auto no-repeat,
-    url("assets/images/cloud2.png") 92% 76% / min(860px, 72vw) auto no-repeat;
+    url("assets/images/cloud2.webp") 10% 68% / min(780px, 66vw) auto no-repeat,
+    url("assets/images/cloud2.webp") 52% 58% / min(700px, 58vw) auto no-repeat,
+    url("assets/images/cloud2.webp") 92% 76% / min(860px, 72vw) auto no-repeat;
   filter: blur(1.2px) saturate(0.84) brightness(1.12) drop-shadow(0 0 34px rgba(255, 222, 155, 0.2));
   mix-blend-mode: screen;
   transform: translate3d(6vw, 1vh, 0);
@@ -515,8 +515,8 @@ main {
   filter: blur(0.3px) drop-shadow(0 0 10px rgba(92, 219, 255, 0.65));
   mix-blend-mode: screen;
   pointer-events: none;
-  -webkit-mask: url("assets/images/title_logo/title_logo.png") center / contain no-repeat;
-  mask: url("assets/images/title_logo/title_logo.png") center / contain no-repeat;
+  -webkit-mask: url("assets/images/title_logo/title_logo.webp") center / contain no-repeat;
+  mask: url("assets/images/title_logo/title_logo.webp") center / contain no-repeat;
   animation: hero-logo-glare 3.6s ease-in-out 1.35s infinite;
 }
 
@@ -1154,7 +1154,7 @@ td {
   background:
     linear-gradient(180deg, transparent 28%, rgba(0, 0, 0, 0.78)),
     linear-gradient(135deg, rgba(216, 177, 92, 0.16), rgba(91, 177, 168, 0.1)),
-    url("assets/images/background_image.png") center / cover;
+    url("assets/images/background_image.webp") center / cover;
   box-shadow: var(--shadow);
   overflow: hidden;
   transition: transform 260ms ease, border-color 260ms ease, box-shadow 260ms ease;
@@ -3590,7 +3590,7 @@ td {
   inset: 0;
   background:
     linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.18)),
-    var(--class-image, url("assets/images/background_image.png")) center / cover;
+    var(--class-image, url("assets/images/background_image.webp")) center / cover;
   opacity: 0.76;
   transform: scale(1.02);
   transition: opacity 260ms ease, transform 460ms ease, background-image 220ms ease;
