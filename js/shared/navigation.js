@@ -8,6 +8,12 @@ export function initNavigation() {
   const pages = document.querySelectorAll('[data-page]');
   const navLinks = document.querySelectorAll('.site-nav a');
   const staticActiveSection = document.body.dataset.currentSection || '';
+  const homeNavSections = Array.from(navLinks)
+    .map((link) => getNavTarget(link))
+    .filter((target, index, targets) => homeSections.has(target) && targets.indexOf(target) === index)
+    .map((target) => document.getElementById(target))
+    .filter(Boolean);
+  let scrollTicking = false;
 
   function closeNav() {
     document.body.classList.remove('nav-open');
@@ -36,6 +42,45 @@ export function initNavigation() {
     navLinks.forEach((link) => {
       const target = getNavTarget(link);
       link.classList.toggle('is-active', target === activeHash);
+    });
+  }
+
+  function getVisibleHomeSection() {
+    if (!homeNavSections.length) return 'home';
+
+    const headerHeight = header?.offsetHeight || 0;
+    const probeLine = headerHeight + window.innerHeight * 0.3;
+    const matchingSection = homeNavSections.find((section) => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= probeLine && rect.bottom > probeLine;
+    });
+
+    if (matchingSection) return matchingSection.id;
+
+    const firstSection = homeNavSections[0];
+    if (firstSection.getBoundingClientRect().top > probeLine) {
+      return firstSection.id;
+    }
+
+    return homeNavSections[homeNavSections.length - 1].id;
+  }
+
+  function syncNavWithScroll() {
+    if (staticActiveSection || !pages.length) return;
+
+    const hash = window.location.hash.replace('#', '');
+    if (pageRoutes.has(hash)) return;
+
+    setActiveNav(getVisibleHomeSection());
+  }
+
+  function requestScrollSync() {
+    if (scrollTicking) return;
+
+    scrollTicking = true;
+    window.requestAnimationFrame(() => {
+      scrollTicking = false;
+      syncNavWithScroll();
     });
   }
 
@@ -74,5 +119,8 @@ export function initNavigation() {
   });
 
   window.addEventListener('hashchange', navigate);
+  window.addEventListener('scroll', requestScrollSync, { passive: true });
+  window.addEventListener('resize', requestScrollSync);
   navigate();
+  syncNavWithScroll();
 }
