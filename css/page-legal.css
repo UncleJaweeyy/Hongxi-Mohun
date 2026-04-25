@@ -1,0 +1,202 @@
+/* ------------------------------------------------------------
+   Legal and support pages
+   Shared layout for privacy policy, terms of service, and contact pages.
+------------------------------------------------------------ */
+.legal-page-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  width: min(980px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(6.5rem, 11vw, 8.5rem) 0 clamp(3.5rem, 7vw, 5rem);
+}
+
+.legal-back-link {
+  position: fixed;
+  top: clamp(1rem, 4vw, 2.5rem);
+  left: clamp(1rem, 4vw, 2.5rem);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 42px;
+  padding: 0.55rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  color: rgba(226, 232, 240, 0.82);
+  background: rgba(17, 24, 39, 0.86);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  font-size: 1.08rem;
+  font-weight: 900;
+  transition: border-color 220ms ease, background 220ms ease, color 220ms ease, box-shadow 220ms ease;
+}
+
+.legal-back-link svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  transition: transform 220ms ease, color 220ms ease;
+}
+
+.legal-back-link:hover,
+.legal-back-link:focus-visible {
+  color: #fff8dc;
+  border-color: rgba(216, 177, 92, 0.58);
+  background: rgba(92, 66, 19, 0.82);
+  box-shadow: 0 0 18px rgba(216, 177, 92, 0.22), 0 16px 38px rgba(0, 0, 0, 0.34);
+}
+
+.legal-back-link:hover svg,
+.legal-back-link:focus-visible svg {
+  color: #f5df9c;
+  transform: translateX(-3px);
+}
+
+.legal-heading {
+  margin: 0 auto clamp(2rem, 5vw, 3.5rem);
+  text-align: center;
+}
+
+.legal-heading h1 {
+  margin: 0;
+  color: transparent;
+  background-image: linear-gradient(90deg, #ca8a04, #fff1a8 48%, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(3rem, 6vw, 5.4rem);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  line-height: 1.08;
+  filter: drop-shadow(0 0 16px rgba(234, 179, 8, 0.34));
+}
+
+.legal-heading p {
+  max-width: 760px;
+  margin: 0.75rem auto 0;
+  color: rgba(248, 250, 252, 0.82);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.72);
+}
+
+.legal-card {
+  display: grid;
+  gap: clamp(1.3rem, 3vw, 2rem);
+  padding: clamp(1.35rem, 4vw, 2.6rem);
+  border: 1px solid rgba(244, 239, 225, 0.12);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(229, 213, 166, 0.07), transparent 28%),
+    rgba(5, 6, 7, 0.66);
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(3px);
+}
+
+.legal-section {
+  display: grid;
+  gap: 0.55rem;
+  padding-bottom: clamp(1rem, 2.5vw, 1.35rem);
+  border-bottom: 1px solid rgba(244, 239, 225, 0.1);
+}
+
+.legal-section:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.legal-section h2 {
+  margin: 0;
+  color: #f5df9c;
+  font-size: clamp(1.45rem, 2.4vw, 2rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.legal-section p,
+.legal-section li {
+  color: rgba(244, 239, 225, 0.82);
+  font-size: clamp(1rem, 1.4vw, 1.14rem);
+  line-height: 1.9;
+}
+
+.legal-section p,
+.legal-section ul {
+  margin: 0;
+}
+
+.legal-section ul {
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 1.35rem;
+}
+
+.legal-section li::marker {
+  color: rgba(216, 177, 92, 0.92);
+}
+
+.legal-meta {
+  display: inline-flex;
+  justify-self: center;
+  min-height: 34px;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.9rem;
+  border: 1px solid rgba(216, 177, 92, 0.24);
+  border-radius: 999px;
+  color: rgba(245, 223, 156, 0.84);
+  background: rgba(92, 66, 19, 0.18);
+  font-family: var(--numeric-font);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.contact-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid rgba(244, 239, 225, 0.1);
+  border-radius: 8px;
+  background: rgba(5, 6, 7, 0.38);
+}
+
+.contact-card strong {
+  color: #f5df9c;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+}
+
+.contact-card a,
+.contact-card span {
+  color: rgba(244, 239, 225, 0.82);
+  overflow-wrap: anywhere;
+}
+
+.contact-card a:hover,
+.contact-card a:focus-visible {
+  color: #fff8dc;
+}
+
+@media (max-width: 760px) {
+  .legal-back-link {
+    position: static;
+    margin-bottom: 2rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}

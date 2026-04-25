@@ -33,6 +33,12 @@
 }
 
 .footer-links a {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.25rem;
   transition: color 220ms ease;
 }
 
