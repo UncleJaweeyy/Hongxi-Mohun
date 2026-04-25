@@ -388,6 +388,25 @@ main {
   box-shadow: 0 0 18px rgba(220, 38, 38, 0.5), 0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
+.auth-actions .auth-user {
+  max-width: 152px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-actions button[disabled],
+.auth-actions button[disabled]:hover,
+.auth-actions button[disabled]:focus-visible {
+  transform: none;
+  border-color: rgba(216, 177, 92, 0.42);
+  color: #f5df9c;
+  background: rgba(91, 177, 168, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(216, 177, 92, 0.08), 0 0 14px rgba(91, 177, 168, 0.08);
+  text-shadow: none;
+  cursor: default;
+}
+
 .nav-toggle {
   display: none;
   width: 44px;
@@ -2614,6 +2633,12 @@ td {
     0 0 28px rgba(216, 177, 92, 0.32),
     0 0 22px rgba(91, 177, 168, 0.18),
     inset 0 0 24px rgba(216, 177, 92, 0.12);
+}
+
+.auth-submit[disabled] {
+  opacity: 0.78;
+  cursor: progress;
+  animation-play-state: paused;
 }
 
 .auth-form--register .auth-submit {

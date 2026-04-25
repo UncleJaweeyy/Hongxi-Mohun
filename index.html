@@ -121,8 +121,8 @@
         <form class="auth-form is-active" data-auth-form="login" novalidate>
           <div class="auth-alert is-hidden" role="alert" aria-live="polite" data-auth-alert></div>
           <label class="auth-field">
-            <span>大侠尊姓大名(账号)</span>
-            <input type="text" name="username" autocomplete="username" placeholder="请输入账号">
+            <span>江湖信箱(邮箱)</span>
+            <input type="email" name="email" autocomplete="email" placeholder="请输入注册邮箱">
           </label>
           <label class="auth-field">
             <span>通关密语(密码)</span>
@@ -179,13 +179,13 @@
             <input type="email" name="email" autocomplete="email" placeholder="找回密码凭证">
           </label>
           <label class="auth-field">
-            <span>手机号码</span>
-            <input type="tel" name="phone" autocomplete="tel" placeholder="绑定手机号">
+            <span>手机号码(可选)</span>
+            <input type="tel" name="phone" autocomplete="tel" placeholder="可选，后续资料补充">
           </label>
           <label class="auth-field auth-field--full">
-            <span>二级密码</span>
+            <span>二级密码(可选)</span>
             <span class="password-field">
-              <input type="password" name="secondaryPassword" inputmode="numeric" placeholder="请输入4位数二级密码，保护游戏内财产">
+              <input type="password" name="secondaryPassword" inputmode="numeric" placeholder="可留空，后续在游戏内设置">
               <button class="password-toggle" type="button" aria-label="显示密码" data-password-toggle>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M3.98 8.22A10.48 10.48 0 0 0 1.93 12C3.23 16.34 7.24 19.5 12 19.5c.99 0 1.95-.14 2.86-.4M6.23 6.23A10.45 10.45 0 0 1 12 4.5c4.76 0 8.77 3.16 10.07 7.5a10.52 10.52 0 0 1-4.29 5.77M6.23 6.23 3 3m3.23 3.23 3.65 3.65m7.89 7.89L21 21m-3.23-3.23-3.65-3.65m0 0a3 3 0 1 0-4.24-4.24m4.24 4.24L9.88 9.88"/>
@@ -200,10 +200,10 @@
         <form class="auth-form" data-auth-form="forgot" novalidate>
           <div class="auth-alert is-hidden" role="alert" aria-live="polite" data-auth-alert></div>
           <label class="auth-field">
-            <span>找回密码凭证</span>
-            <input type="text" name="identifier" autocomplete="username" placeholder="请输入账号或手机号">
+            <span>注册邮箱</span>
+            <input type="email" name="email" autocomplete="email" placeholder="请输入注册邮箱">
           </label>
-          <button class="auth-submit" type="submit">发送重置链接</button>
+          <button class="auth-submit" type="submit">发送重置邮件</button>
           <p class="auth-switch"><button class="text-button" type="button" data-auth-open="login">想起密语了</button></p>
         </form>
       </div>

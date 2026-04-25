@@ -248,44 +248,95 @@
       <div class="auth-dialog" role="dialog" aria-modal="true" aria-labelledby="auth-title">
         <button class="modal-close" type="button" aria-label="关闭" data-auth-close>×</button>
         <p class="eyebrow" data-auth-eyebrow>账号</p>
-        <h2 id="auth-title" data-auth-title>登录江湖</h2>
+        <h2 id="auth-title" data-auth-title>邮箱登录</h2>
 
-        <form class="auth-form is-active" data-auth-form="login">
-          <label>
-            大侠尊姓大名
-            <input type="text" autocomplete="username" placeholder="请输入账号">
+        <form class="auth-form is-active" data-auth-form="login" novalidate>
+          <div class="auth-alert is-hidden" role="alert" aria-live="polite" data-auth-alert></div>
+          <label class="auth-field">
+            <span>江湖信箱(邮箱)</span>
+            <input type="email" name="email" autocomplete="email" placeholder="请输入注册邮箱">
           </label>
-          <label>
-            通关密语
-            <input type="password" autocomplete="current-password" placeholder="请输入密码">
+          <label class="auth-field">
+            <span>通关密语(密码)</span>
+            <span class="password-field">
+              <input type="password" name="password" autocomplete="current-password" placeholder="请输入密码 (至少8位)">
+              <button class="password-toggle" type="button" aria-label="显示密码" data-password-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3.98 8.22A10.48 10.48 0 0 0 1.93 12C3.23 16.34 7.24 19.5 12 19.5c.99 0 1.95-.14 2.86-.4M6.23 6.23A10.45 10.45 0 0 1 12 4.5c4.76 0 8.77 3.16 10.07 7.5a10.52 10.52 0 0 1-4.29 5.77M6.23 6.23 3 3m3.23 3.23 3.65 3.65m7.89 7.89L21 21m-3.23-3.23-3.65-3.65m0 0a3 3 0 1 0-4.24-4.24m4.24 4.24L9.88 9.88"/>
+                </svg>
+              </button>
+            </span>
           </label>
-          <button class="section-button" type="submit">登录</button>
-          <button class="text-button" type="button" data-auth-open="forgot">忘记密码</button>
+          <div class="auth-options">
+            <label class="remember-field">
+              <input type="checkbox">
+              记住我
+            </label>
+            <button class="text-button" type="button" data-auth-open="forgot">忘记密码？</button>
+          </div>
+          <button class="auth-submit" type="submit">登 录</button>
+          <p class="auth-switch">尚未加入江湖？ <button class="text-button" type="button" data-auth-open="register">立即注册</button></p>
         </form>
 
-        <form class="auth-form" data-auth-form="register">
-          <label>
-            大侠尊姓大名
-            <input type="text" autocomplete="username" placeholder="创建账号">
+        <form class="auth-form auth-form--register" data-auth-form="register" novalidate>
+          <div class="auth-alert is-hidden" role="alert" aria-live="polite" data-auth-alert></div>
+          <label class="auth-field auth-field--full">
+            <span>大侠尊姓大名(账号)</span>
+            <input type="text" name="username" autocomplete="username" placeholder="4-20位字母或数字">
           </label>
-          <label>
-            通关密语
-            <input type="password" autocomplete="new-password" placeholder="至少 6 位字母或数字">
+          <label class="auth-field">
+            <span>通关密语(密码)</span>
+            <span class="password-field">
+              <input type="password" name="password" autocomplete="new-password" placeholder="至少8位">
+              <button class="password-toggle" type="button" aria-label="显示密码" data-password-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3.98 8.22A10.48 10.48 0 0 0 1.93 12C3.23 16.34 7.24 19.5 12 19.5c.99 0 1.95-.14 2.86-.4M6.23 6.23A10.45 10.45 0 0 1 12 4.5c4.76 0 8.77 3.16 10.07 7.5a10.52 10.52 0 0 1-4.29 5.77M6.23 6.23 3 3m3.23 3.23 3.65 3.65m7.89 7.89L21 21m-3.23-3.23-3.65-3.65m0 0a3 3 0 1 0-4.24-4.24m4.24 4.24L9.88 9.88"/>
+                </svg>
+              </button>
+            </span>
           </label>
-          <label>
-            再次输入
-            <input type="password" autocomplete="new-password" placeholder="再次输入通关密语">
+          <label class="auth-field">
+            <span>核对密语(确认密码)</span>
+            <span class="password-field">
+              <input type="password" name="confirmPassword" autocomplete="new-password" placeholder="再次输入">
+              <button class="password-toggle" type="button" aria-label="显示密码" data-password-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3.98 8.22A10.48 10.48 0 0 0 1.93 12C3.23 16.34 7.24 19.5 12 19.5c.99 0 1.95-.14 2.86-.4M6.23 6.23A10.45 10.45 0 0 1 12 4.5c4.76 0 8.77 3.16 10.07 7.5a10.52 10.52 0 0 1-4.29 5.77M6.23 6.23 3 3m3.23 3.23 3.65 3.65m7.89 7.89L21 21m-3.23-3.23-3.65-3.65m0 0a3 3 0 1 0-4.24-4.24m4.24 4.24L9.88 9.88"/>
+                </svg>
+              </button>
+            </span>
           </label>
-          <button class="section-button" type="submit">注册</button>
+          <label class="auth-field">
+            <span>电子邮箱</span>
+            <input type="email" name="email" autocomplete="email" placeholder="找回密码凭证">
+          </label>
+          <label class="auth-field">
+            <span>手机号码(可选)</span>
+            <input type="tel" name="phone" autocomplete="tel" placeholder="可选，后续资料补充">
+          </label>
+          <label class="auth-field auth-field--full">
+            <span>二级密码(可选)</span>
+            <span class="password-field">
+              <input type="password" name="secondaryPassword" inputmode="numeric" placeholder="可留空，后续在游戏内设置">
+              <button class="password-toggle" type="button" aria-label="显示密码" data-password-toggle>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M3.98 8.22A10.48 10.48 0 0 0 1.93 12C3.23 16.34 7.24 19.5 12 19.5c.99 0 1.95-.14 2.86-.4M6.23 6.23A10.45 10.45 0 0 1 12 4.5c4.76 0 8.77 3.16 10.07 7.5a10.52 10.52 0 0 1-4.29 5.77M6.23 6.23 3 3m3.23 3.23 3.65 3.65m7.89 7.89L21 21m-3.23-3.23-3.65-3.65m0 0a3 3 0 1 0-4.24-4.24m4.24 4.24L9.88 9.88"/>
+                </svg>
+              </button>
+            </span>
+          </label>
+          <button class="auth-submit" type="submit">注 册</button>
+          <p class="auth-switch">已有账号？ <button class="text-button" type="button" data-auth-open="login">立即登录</button></p>
         </form>
 
-        <form class="auth-form" data-auth-form="forgot">
-          <label>
-            找回密码凭证
-            <input type="text" autocomplete="username" placeholder="请输入账号或手机号">
+        <form class="auth-form" data-auth-form="forgot" novalidate>
+          <div class="auth-alert is-hidden" role="alert" aria-live="polite" data-auth-alert></div>
+          <label class="auth-field">
+            <span>注册邮箱</span>
+            <input type="email" name="email" autocomplete="email" placeholder="请输入注册邮箱">
           </label>
-          <button class="section-button" type="submit">发送重置链接</button>
-          <button class="text-button" type="button" data-auth-open="login">想起密语了</button>
+          <button class="auth-submit" type="submit">发送重置邮件</button>
+          <p class="auth-switch"><button class="text-button" type="button" data-auth-open="login">想起密语了</button></p>
         </form>
       </div>
     </div>
