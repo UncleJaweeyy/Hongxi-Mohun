@@ -33,53 +33,35 @@ service cloud.firestore {
       return request.resource.data.keys().hasOnly([
         'uid',
         'username',
-        'usernameLower',
         'email',
         'phone',
-        'hasPhone',
-        'hasSecondaryPassword',
-        'role',
-        'authProvider',
-        'emailVerified',
-        'createdAt',
-        'updatedAt'
+        'createdAt'
       ]) &&
       request.resource.data.keys().hasAll([
         'uid',
         'username',
-        'usernameLower',
         'email',
         'phone',
-        'hasPhone',
-        'hasSecondaryPassword',
-        'role',
-        'authProvider',
-        'emailVerified',
-        'createdAt',
-        'updatedAt'
+        'createdAt'
       ]);
     }
 
     function hasValidUserProfileValues(uid) {
-      return request.resource.data.uid == uid &&
+      return request.auth.uid == uid &&
+        request.resource.data.uid == uid &&
         request.resource.data.uid == request.auth.uid &&
         request.resource.data.email == request.auth.token.email &&
+        request.auth.token.email_verified == true &&
         isValidUsername(request.resource.data.username) &&
-        isValidUsernameKey(request.resource.data.usernameLower) &&
         isValidPhone(request.resource.data.phone) &&
-        request.resource.data.hasPhone == (request.resource.data.phone != '') &&
-        request.resource.data.hasSecondaryPassword is bool &&
-        request.resource.data.emailVerified is bool &&
-        request.resource.data.role == 'player' &&
-        request.resource.data.authProvider == 'password' &&
-        getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.usernameLower)).data.uid == request.auth.uid;
+        getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username.lower())).data.uid == request.auth.uid &&
+        getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username.lower())).data.username == request.resource.data.username;
     }
 
     function isValidUserProfileCreate(uid) {
       return hasValidUserProfileFields() &&
         hasValidUserProfileValues(uid) &&
-        request.resource.data.createdAt == request.time &&
-        request.resource.data.updatedAt == request.time;
+        request.resource.data.createdAt == request.time;
     }
 
     function isValidUsernameReservation(usernameKey) {

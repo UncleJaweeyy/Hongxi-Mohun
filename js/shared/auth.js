@@ -22,6 +22,7 @@ const secondaryPasswordPattern = /^\d{4}$/;
 const usernameTakenCode = 'auth/username-already-in-use';
 const verificationPollMs = 5000;
 const verificationTimeoutMs = 10 * 60 * 1000;
+const pendingSignupStorageKey = 'hongxiPendingSignupProfiles';
 
 function getAuthAlert(form) {
   return form?.querySelector('[data-auth-alert]');
@@ -100,6 +101,39 @@ function normalizeEmail(email) {
 
 function normalizePhone(phone) {
   return phone.trim().replace(/\s+/g, ' ');
+}
+
+function readPendingSignupProfiles() {
+  try {
+    return JSON.parse(window.localStorage.getItem(pendingSignupStorageKey) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function writePendingSignupProfiles(profiles) {
+  try {
+    window.localStorage.setItem(pendingSignupStorageKey, JSON.stringify(profiles));
+  } catch {}
+}
+
+function savePendingSignupProfile(uid, profile) {
+  const profiles = readPendingSignupProfiles();
+  profiles[uid] = profile;
+  writePendingSignupProfiles(profiles);
+}
+
+function getPendingSignupProfile(user) {
+  if (!user?.uid) return null;
+  const profiles = readPendingSignupProfiles();
+  return profiles[user.uid] || null;
+}
+
+function removePendingSignupProfile(uid) {
+  if (!uid) return;
+  const profiles = readPendingSignupProfiles();
+  delete profiles[uid];
+  writePendingSignupProfiles(profiles);
 }
 
 function validateAuthForm(form) {
@@ -205,6 +239,14 @@ async function deleteIncompleteUser(authModule, user) {
   } catch {}
 }
 
+async function refreshUserToken(user) {
+  if (typeof user?.getIdToken !== 'function') return;
+
+  try {
+    await user.getIdToken(true);
+  } catch {}
+}
+
 async function waitForEmailVerification(auth, authModule, user, onStatus) {
   const startedAt = Date.now();
 
@@ -213,7 +255,10 @@ async function waitForEmailVerification(auth, authModule, user, onStatus) {
       await authModule.reload(user);
     }
 
-    if (user.emailVerified) return true;
+    if (user.emailVerified) {
+      await refreshUserToken(user);
+      return true;
+    }
 
     onStatus?.();
     await new Promise((resolve) => {
@@ -225,7 +270,20 @@ async function waitForEmailVerification(auth, authModule, user, onStatus) {
   return false;
 }
 
-async function createUserProfile(form, user) {
+function buildUserProfile(form, user) {
+  const username = normalizeUsername(getTrimmedValue(form, 'username'));
+  const phone = normalizePhone(getTrimmedValue(form, 'phone'));
+
+  return {
+    uid: user.uid,
+    username,
+    usernameLower: normalizeUsernameKey(username),
+    email: user.email || normalizeEmail(getTrimmedValue(form, 'email')),
+    phone
+  };
+}
+
+async function createUserProfile(profile, user) {
   const firestore = await getFirebaseFirestore();
   const firestoreModule = await getFirebaseFirestoreModule();
 
@@ -234,18 +292,13 @@ async function createUserProfile(form, user) {
   }
 
   const { doc, runTransaction, serverTimestamp } = firestoreModule;
-  const username = normalizeUsername(getTrimmedValue(form, 'username'));
-  const usernameKey = normalizeUsernameKey(username);
-  const phone = normalizePhone(getTrimmedValue(form, 'phone'));
-  const secondaryPassword = getTrimmedValue(form, 'secondaryPassword');
-  const email = user.email || normalizeEmail(getTrimmedValue(form, 'email'));
   const userRef = doc(firestore, 'users', user.uid);
-  const usernameRef = doc(firestore, 'usernames', usernameKey);
+  const usernameRef = doc(firestore, 'usernames', profile.usernameLower);
 
   await runTransaction(firestore, async (transaction) => {
     const usernameSnapshot = await transaction.get(usernameRef);
 
-    if (usernameSnapshot.exists()) {
+    if (usernameSnapshot.exists() && usernameSnapshot.data()?.uid !== user.uid) {
       const error = new Error('Username already in use.');
       error.code = usernameTakenCode;
       throw error;
@@ -253,24 +306,17 @@ async function createUserProfile(form, user) {
 
     transaction.set(usernameRef, {
       uid: user.uid,
-      username,
-      usernameLower: usernameKey,
+      username: profile.username,
+      usernameLower: profile.usernameLower,
       createdAt: serverTimestamp()
     });
 
     transaction.set(userRef, {
       uid: user.uid,
-      username,
-      usernameLower: usernameKey,
-      email,
-      phone,
-      hasPhone: Boolean(phone),
-      hasSecondaryPassword: Boolean(secondaryPassword),
-      role: 'player',
-      authProvider: 'password',
-      emailVerified: Boolean(user.emailVerified),
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
+      username: profile.username,
+      email: profile.email,
+      phone: profile.phone,
+      createdAt: serverTimestamp()
     });
   });
 }
@@ -419,6 +465,13 @@ export function initAuth() {
             }
           }
 
+          await refreshUserToken(credential.user);
+          const pendingProfile = getPendingSignupProfile(credential.user);
+          if (pendingProfile) {
+            await createUserProfile(pendingProfile, credential.user);
+            removePendingSignupProfile(credential.user.uid);
+          }
+
           syncAuthActions(credential.user);
           setAuthAlert(form, '登录成功，正在进入江湖...', 'success');
           form.reset();
@@ -433,17 +486,18 @@ export function initAuth() {
           );
 
           const username = getTrimmedValue(form, 'username');
+          const profile = buildUserProfile(form, credential.user);
 
           try {
             if (username) {
               await authModule.updateProfile(credential.user, { displayName: normalizeUsername(username) });
             }
-
-            await createUserProfile(form, credential.user);
           } catch (profileError) {
             await deleteIncompleteUser(authModule, credential.user);
             throw profileError;
           }
+
+          savePendingSignupProfile(credential.user.uid, profile);
 
           try {
             await authModule.sendEmailVerification(credential.user);
@@ -461,6 +515,8 @@ export function initAuth() {
             return;
           }
 
+          await createUserProfile(profile, credential.user);
+          removePendingSignupProfile(credential.user.uid);
           syncAuthActions(credential.user);
           setAuthAlert(form, '邮箱验证成功，正在进入江湖...', 'success');
           form.reset();

@@ -3,6 +3,7 @@
 This project uses Firebase Authentication plus Cloud Firestore for the ranking and news admin panel.
 
 Public account signup also uses Firebase Authentication. Passwords are kept by Firebase Auth only; Firestore stores the non-password profile fields needed by the site.
+Player profile documents are written only after Firebase confirms the signup email has been verified.
 
 ## Firestore schema
 
@@ -14,16 +15,9 @@ Created when a player signs up.
 {
   "uid": "firebase-auth-uid",
   "username": "HeroName",
-  "usernameLower": "heroname",
   "email": "player@example.com",
-  "phone": "+63 900 000 0000",
-  "hasPhone": true,
-  "hasSecondaryPassword": false,
-  "role": "player",
-  "authProvider": "password",
-  "emailVerified": false,
-  "createdAt": "serverTimestamp()",
-  "updatedAt": "serverTimestamp()"
+  "phone": "",
+  "createdAt": "serverTimestamp()"
 }
 ```
 
