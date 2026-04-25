@@ -1,6 +1,15 @@
-import { initClickSound } from '../shared/click-sound.js';
-import { initLeafCanvas } from '../shared/leaf-canvas.js';
 import { getFirebaseAuth, getFirebaseAuthModule, getFirebaseFirestore, getFirebaseFirestoreModule } from '../shared/firebase-client.js';
+import {
+  buildNewsDocument,
+  createEmptyNewsItem,
+  editorTextToHtml,
+  escapeHtml,
+  getFallbackNewsItems,
+  loadNewsFromFirestore,
+  newsCategories,
+  newsFilterOptions,
+  sortNewsItems
+} from '../shared/news-store.js';
 import {
   buildRankingsDocument,
   createEmptyRankingEntry,
@@ -14,49 +23,106 @@ import {
 
 const state = {
   activeCategory: defaultRankingCategoryKey,
-  dirty: false,
+  activeNewsFilter: '全部',
+  contentMode: 'dashboard',
+  dirty: {
+    rankings: false,
+    news: false
+  },
   isAdmin: false,
+  newsItems: getFallbackNewsItems(),
+  newsUpdatedAt: null,
   rankings: getFallbackRankings(),
-  user: null,
-  updatedAt: null
+  rankingsUpdatedAt: null,
+  user: null
 };
 
-function setAlert(element, message, tone = 'warning') {
+const alertTimers = new WeakMap();
+const editorModes = new Set(['rankings', 'news']);
+
+function setAlert(element, message, tone = 'warning', options = {}) {
   if (!element) return;
+
+  const { autoHideMs = 0 } = options;
+  const activeTimer = alertTimers.get(element);
+
+  if (activeTimer) {
+    window.clearTimeout(activeTimer);
+    alertTimers.delete(element);
+  }
 
   element.textContent = message;
   element.classList.remove('is-hidden', 'is-error', 'is-success');
   if (tone === 'error') element.classList.add('is-error');
   if (tone === 'success') element.classList.add('is-success');
   if (!message) element.classList.add('is-hidden');
+
+  if (message && autoHideMs > 0) {
+    const timer = window.setTimeout(() => {
+      element.textContent = '';
+      element.classList.add('is-hidden');
+      element.classList.remove('is-error', 'is-success');
+      alertTimers.delete(element);
+    }, autoHideMs);
+
+    alertTimers.set(element, timer);
+  }
 }
 
 function createReferences() {
   return {
-    categoryLabel: document.querySelector('[data-admin-category-label]'),
-    categoryTabs: document.querySelector('[data-admin-category-tabs]'),
+    backButtons: Array.from(document.querySelectorAll('[data-admin-back-dashboard]')),
+    dashboardPanel: document.querySelector('[data-admin-dashboard-panel]'),
+    contentPanels: Array.from(document.querySelectorAll('[data-admin-content-panel]')),
+    dashboardOpenButtons: Array.from(document.querySelectorAll('[data-admin-open-mode]')),
     editorPanel: document.querySelector('[data-admin-editor-panel]'),
-    email: document.querySelector('[data-admin-email]'),
     loginAlert: document.querySelector('[data-admin-login-alert]'),
     loginForm: document.querySelector('[data-admin-login-form]'),
     loginPanel: document.querySelector('[data-admin-login-panel]'),
     logoutButton: document.querySelector('[data-admin-logout]'),
     pendingPanel: document.querySelector('[data-admin-pending-panel]'),
-    previewList: document.querySelector('[data-admin-preview-list]'),
-    rowList: document.querySelector('[data-admin-row-list]'),
-    saveButton: document.querySelector('[data-admin-save]'),
-    sessionLabel: document.querySelector('[data-admin-session-label]'),
-    status: document.querySelector('[data-admin-status]'),
-    uid: document.querySelector('[data-admin-uid]'),
-    updatedMeta: document.querySelector('[data-admin-updated-meta]')
+    rankings: {
+      addButton: document.querySelector('[data-admin-add-row]'),
+      categoryLabel: document.querySelector('[data-admin-category-label]'),
+      categoryTabs: document.querySelector('[data-admin-category-tabs]'),
+      previewList: document.querySelector('[data-admin-preview-list]'),
+      rowList: document.querySelector('[data-admin-row-list]'),
+      saveButton: document.querySelector('[data-admin-save]'),
+      updatedMeta: document.querySelector('[data-admin-updated-meta]')
+    },
+    news: {
+      addButton: document.querySelector('[data-admin-news-add-row]'),
+      filterTabs: document.querySelector('[data-admin-news-filter-tabs]'),
+      previewList: document.querySelector('[data-admin-news-preview-list]'),
+      rowList: document.querySelector('[data-admin-news-row-list]'),
+      saveButton: document.querySelector('[data-admin-news-save]'),
+      updatedMeta: document.querySelector('[data-admin-news-updated-meta]')
+    },
+    status: document.querySelector('[data-admin-status]')
   };
 }
 
-function getActiveEntries() {
+function markDirty(mode) {
+  state.dirty[mode] = true;
+}
+
+function formatUpdatedMeta(value, user) {
+  if (!value?.toDate) return '当前显示的是默认内容。';
+
+  const formatted = new Intl.DateTimeFormat('zh-CN', {
+    dateStyle: 'medium',
+    timeStyle: 'short'
+  }).format(value.toDate());
+
+  if (!user?.email) return `最近更新：${formatted}`;
+  return `最近更新：${formatted} · ${user.email}`;
+}
+
+function getActiveRankingEntries() {
   return state.rankings[state.activeCategory] || [];
 }
 
-function sortEntries(entries) {
+function sortRankingEntries(entries) {
   return entries
     .map((entry, index) => ({
       ...entry,
@@ -70,26 +136,65 @@ function sortEntries(entries) {
     .map((entry, index) => ({ ...entry, position: index + 1 }));
 }
 
-function markDirty() {
-  state.dirty = true;
+function getFilteredNewsItems() {
+  const items = sortNewsItems(state.newsItems);
+  if (state.activeNewsFilter === '全部') return items;
+  return items.filter((item) => item.category === state.activeNewsFilter);
 }
 
-function formatUpdatedMeta(value, user) {
-  if (!value?.toDate) return '当前显示的是本地或默认数据。';
+function renderContentMode(refs) {
+  if (refs.dashboardPanel) refs.dashboardPanel.hidden = state.contentMode !== 'dashboard';
 
-  const formatted = new Intl.DateTimeFormat('zh-CN', {
-    dateStyle: 'medium',
-    timeStyle: 'short'
-  }).format(value.toDate());
-
-  if (!user?.email) return `最近保存时间：${formatted}`;
-  return `最近保存时间：${formatted} · ${user.email}`;
+  refs.contentPanels.forEach((panel) => {
+    panel.hidden = panel.dataset.adminContentPanel !== state.contentMode;
+  });
 }
 
-function renderCategoryTabs(refs) {
-  if (!refs.categoryTabs) return;
+function getModeFromLocation() {
+  const mode = window.location.hash.replace('#', '');
+  return editorModes.has(mode) ? mode : 'dashboard';
+}
 
-  refs.categoryTabs.innerHTML = rankingCategories.map((category) => `
+function getModeUrl(mode) {
+  const hash = editorModes.has(mode) ? `#${mode}` : '';
+  return `${window.location.pathname}${window.location.search}${hash}`;
+}
+
+function writeModeHistory(mode, action = 'replace') {
+  const method = action === 'push' ? 'pushState' : 'replaceState';
+  window.history[method]({ adminMode: mode }, '', getModeUrl(mode));
+}
+
+function setContentMode(refs, mode, options = {}) {
+  const nextMode = editorModes.has(mode) ? mode : 'dashboard';
+  if (!state.isAdmin && nextMode !== 'dashboard') return;
+
+  state.contentMode = nextMode;
+  renderContentMode(refs);
+
+  if (options.history) {
+    writeModeHistory(nextMode, options.history);
+  }
+}
+
+function hasUnsavedChanges(mode = state.contentMode) {
+  return editorModes.has(mode) && Boolean(state.dirty[mode]);
+}
+
+function hasAnyUnsavedChanges() {
+  return Object.values(state.dirty).some(Boolean);
+}
+
+function getModeLabel(mode) {
+  if (mode === 'rankings') return '排行榜';
+  if (mode === 'news') return '快报公告';
+  return '当前内容';
+}
+
+function renderRankingCategoryTabs(refs) {
+  if (!refs.rankings.categoryTabs) return;
+
+  refs.rankings.categoryTabs.innerHTML = rankingCategories.map((category) => `
     <button
       type="button"
       role="tab"
@@ -101,33 +206,35 @@ function renderCategoryTabs(refs) {
   `).join('');
 }
 
-function renderPreview(refs) {
-  if (!refs.previewList) return;
+function renderRankingPreview(refs) {
+  const previewList = refs.rankings.previewList;
+  if (!previewList) return;
 
-  const previewEntries = sortEntries(getActiveEntries());
-  refs.previewList.innerHTML = previewEntries.map((entry) => `
+  const previewEntries = sortRankingEntries(getActiveRankingEntries());
+  previewList.innerHTML = previewEntries.map((entry) => `
     <li>
-      <span>${entry.position}. ${entry.name || '未命名'}</span>
-      <strong>${entry.school || '未设置流派'} · ${formatRankingScore(entry.score)}</strong>
+      <span>${entry.position}. ${escapeHtml(entry.name || '未命名')}</span>
+      <strong>${escapeHtml(entry.school || '未设置流派')} · ${formatRankingScore(entry.score)}</strong>
     </li>
   `).join('');
 
   if (!previewEntries.length) {
-    refs.previewList.innerHTML = '<li><span>当前分类还没有榜单数据。</span><strong>新增一行后即可开始编辑。</strong></li>';
+    previewList.innerHTML = '<li><span>当前分类还没有榜单数据。</span><strong>新增一行后即可开始编辑。</strong></li>';
   }
 }
 
-function renderRows(refs) {
-  if (!refs.rowList) return;
+function renderRankingRows(refs) {
+  const rowList = refs.rankings.rowList;
+  if (!rowList) return;
 
-  const entries = sortEntries(getActiveEntries());
+  const entries = sortRankingEntries(getActiveRankingEntries());
   state.rankings[state.activeCategory] = entries;
 
-  refs.rowList.innerHTML = entries.map((entry) => `
-    <article class="admin-row-card" data-entry-id="${entry.id}">
+  rowList.innerHTML = entries.map((entry) => `
+    <article class="admin-row-card" data-entry-id="${escapeHtml(entry.id)}">
       <div class="admin-row-card-head">
         <strong>第 ${entry.position} 名</strong>
-        <button class="text-button" type="button" data-admin-remove-row="${entry.id}">删除</button>
+        <button class="text-button admin-danger-button" type="button" data-admin-remove-row="${escapeHtml(entry.id)}">删除</button>
       </div>
 
       <div class="admin-row-fields">
@@ -138,12 +245,12 @@ function renderRows(refs) {
 
         <label class="auth-field">
           <span>豪侠 / 帮会名</span>
-          <input type="text" value="${entry.name}" data-admin-field="name" placeholder="请输入名字">
+          <input type="text" value="${escapeHtml(entry.name)}" data-admin-field="name" placeholder="请输入名字">
         </label>
 
         <label class="auth-field">
           <span>流派 / 类型</span>
-          <input type="text" value="${entry.school}" data-admin-field="school" placeholder="请输入流派">
+          <input type="text" value="${escapeHtml(entry.school)}" data-admin-field="school" placeholder="请输入流派">
         </label>
 
         <label class="auth-field">
@@ -155,30 +262,116 @@ function renderRows(refs) {
   `).join('');
 }
 
-function renderEditor(refs) {
+function renderRankings(refs) {
   const category = getRankingCategory(state.activeCategory);
 
-  if (refs.categoryLabel) refs.categoryLabel.textContent = category.label;
-  if (refs.updatedMeta) refs.updatedMeta.textContent = formatUpdatedMeta(state.updatedAt, state.user);
-  if (refs.saveButton) refs.saveButton.textContent = state.dirty ? '保存榜单 *' : '保存榜单';
+  if (refs.rankings.categoryLabel) refs.rankings.categoryLabel.textContent = category.label;
+  if (refs.rankings.updatedMeta) refs.rankings.updatedMeta.textContent = formatUpdatedMeta(state.rankingsUpdatedAt, state.user);
+  if (refs.rankings.saveButton) refs.rankings.saveButton.textContent = state.dirty.rankings ? '保存榜单 *' : '保存榜单';
 
-  renderCategoryTabs(refs);
-  renderRows(refs);
-  renderPreview(refs);
+  renderRankingCategoryTabs(refs);
+  renderRankingRows(refs);
+  renderRankingPreview(refs);
+}
+
+function renderNewsFilterTabs(refs) {
+  const tabs = refs.news.filterTabs;
+  if (!tabs) return;
+
+  tabs.innerHTML = newsFilterOptions.map((filter) => `
+    <button
+      type="button"
+      role="tab"
+      class="${filter === state.activeNewsFilter ? 'is-active' : ''}"
+      data-admin-news-filter="${filter}"
+    >
+      ${filter}
+    </button>
+  `).join('');
+}
+
+function renderNewsPreview(refs) {
+  const previewList = refs.news.previewList;
+  if (!previewList) return;
+
+  const items = getFilteredNewsItems().slice(0, 6);
+  previewList.innerHTML = items.map((item) => `
+    <li>
+      <span>【${escapeHtml(item.category)}】${escapeHtml(item.title || '未命名快报')}</span>
+      <strong>${escapeHtml(item.date)}</strong>
+    </li>
+  `).join('');
+
+  if (!items.length) {
+    previewList.innerHTML = '<li><span>当前筛选下还没有快报内容。</span><strong>新增快报后即可开始编辑。</strong></li>';
+  }
+}
+
+function renderNewsRows(refs) {
+  const rowList = refs.news.rowList;
+  if (!rowList) return;
+
+  const items = getFilteredNewsItems();
+  rowList.innerHTML = items.map((item, index) => `
+    <article class="admin-row-card" data-news-id="${escapeHtml(item.id)}">
+      <div class="admin-row-card-head">
+        <strong>${escapeHtml(item.title || `第 ${index + 1} 条快报`)}</strong>
+        <button class="text-button admin-danger-button" type="button" data-admin-news-remove-row="${escapeHtml(item.id)}">删除</button>
+      </div>
+
+      <div class="admin-row-fields admin-row-fields--news">
+        <label class="auth-field">
+          <span>发布日期</span>
+          <input type="date" value="${escapeHtml(item.date)}" data-admin-news-field="date">
+        </label>
+
+        <label class="auth-field">
+          <span>分类</span>
+          <select data-admin-news-field="category">
+            ${newsCategories.map((category) => `<option value="${escapeHtml(category)}"${category === item.category ? ' selected' : ''}>${escapeHtml(category)}</option>`).join('')}
+          </select>
+        </label>
+
+        <label class="auth-field auth-field--full">
+          <span>标题</span>
+          <input type="text" value="${escapeHtml(item.title)}" data-admin-news-field="title" placeholder="请输入快报标题">
+        </label>
+
+        <label class="auth-field auth-field--full">
+          <span>正文内容</span>
+          <textarea rows="8" data-admin-news-field="bodyDraft" placeholder="请输入快报正文">${escapeHtml(item.bodyDraft || '')}</textarea>
+        </label>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderNews(refs) {
+  if (refs.news.updatedMeta) refs.news.updatedMeta.textContent = formatUpdatedMeta(state.newsUpdatedAt, state.user);
+  if (refs.news.saveButton) refs.news.saveButton.textContent = state.dirty.news ? '保存快报 *' : '保存快报';
+
+  renderNewsFilterTabs(refs);
+  renderNewsRows(refs);
+  renderNewsPreview(refs);
 }
 
 function renderSession(refs) {
-  const email = state.user?.email || '未登录';
-  const uid = state.user?.uid || '等待登录';
+  if (!state.isAdmin) {
+    state.contentMode = 'dashboard';
+  }
 
-  if (refs.email) refs.email.textContent = email;
-  if (refs.uid) refs.uid.textContent = uid;
-  if (refs.sessionLabel) refs.sessionLabel.textContent = state.user ? email : '未登录';
   if (refs.logoutButton) refs.logoutButton.hidden = !state.user;
 
   if (refs.loginPanel) refs.loginPanel.hidden = Boolean(state.user);
   if (refs.pendingPanel) refs.pendingPanel.hidden = !(state.user && !state.isAdmin);
   if (refs.editorPanel) refs.editorPanel.hidden = !state.isAdmin;
+  renderContentMode(refs);
+}
+
+function renderAdmin(refs) {
+  renderContentMode(refs);
+  renderRankings(refs);
+  renderNews(refs);
 }
 
 async function isAuthorizedAdmin(user) {
@@ -194,26 +387,115 @@ async function isAuthorizedAdmin(user) {
 async function refreshRankings(refs, statusMessage = '') {
   const result = await loadRankingsFromFirestore();
   state.rankings = result.rankings;
-  state.updatedAt = result.updatedAt ?? null;
-  state.dirty = false;
-  renderEditor(refs);
+  state.rankingsUpdatedAt = result.updatedAt ?? null;
+  state.dirty.rankings = false;
+  renderRankings(refs);
 
   if (statusMessage) {
-    setAlert(refs.status, statusMessage, 'success');
+    setAlert(refs.status, statusMessage, 'success', { autoHideMs: 2600 });
   }
 }
 
-async function saveRankings(refs) {
+async function refreshNews(refs, statusMessage = '') {
+  const result = await loadNewsFromFirestore();
+  state.newsItems = result.items;
+  state.newsUpdatedAt = result.updatedAt ?? null;
+  state.dirty.news = false;
+  renderNews(refs);
+
+  if (statusMessage) {
+    setAlert(refs.status, statusMessage, 'success', { autoHideMs: 2600 });
+  }
+}
+
+function focusRankingField(refs, entryId, field) {
+  window.requestAnimationFrame(() => {
+    const row = Array.from(refs.rankings.rowList?.querySelectorAll('[data-entry-id]') || [])
+      .find((item) => item.dataset.entryId === entryId);
+    const input = row?.querySelector(`[data-admin-field="${field}"]`);
+    input?.focus();
+    input?.select?.();
+  });
+}
+
+function focusNewsField(refs, newsId, field) {
+  window.requestAnimationFrame(() => {
+    const row = Array.from(refs.news.rowList?.querySelectorAll('[data-news-id]') || [])
+      .find((item) => item.dataset.newsId === newsId);
+    const input = row?.querySelector(`[data-admin-news-field="${field}"]`);
+    input?.focus();
+    input?.select?.();
+  });
+}
+
+function validateRankingsForSave(refs) {
+  for (const category of rankingCategories) {
+    const entries = state.rankings[category.key] || [];
+
+    for (const [index, entry] of entries.entries()) {
+      const checks = [
+        { field: 'name', label: '豪侠 / 帮会名', invalid: !String(entry.name || '').trim() },
+        { field: 'school', label: '流派 / 类型', invalid: !String(entry.school || '').trim() },
+        { field: 'score', label: '战力 / 积分', invalid: !Number.isFinite(Number(entry.score)) || Number(entry.score) <= 0 }
+      ];
+      const failed = checks.find((check) => check.invalid);
+
+      if (failed) {
+        state.activeCategory = category.key;
+        renderRankings(refs);
+        setAlert(refs.status, `请先补全「${category.label}」第 ${index + 1} 名的${failed.label}。`, 'error', { autoHideMs: 4200 });
+        focusRankingField(refs, entry.id, failed.field);
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+function validateNewsForSave(refs) {
+  for (const [index, item] of state.newsItems.entries()) {
+    const bodyDraft = String(item.bodyDraft || htmlToEditorText(item.body) || '').trim();
+    const checks = [
+      { field: 'date', label: '发布日期', invalid: !/^\d{4}-\d{2}-\d{2}$/.test(String(item.date || '').trim()) },
+      { field: 'category', label: '分类', invalid: !newsCategories.includes(item.category) },
+      { field: 'title', label: '标题', invalid: !String(item.title || '').trim() },
+      { field: 'bodyDraft', label: '正文内容', invalid: !bodyDraft || bodyDraft === '请填写快报正文内容。' }
+    ];
+    const failed = checks.find((check) => check.invalid);
+
+    if (failed) {
+      state.activeNewsFilter = newsCategories.includes(item.category) ? item.category : '全部';
+      renderNews(refs);
+      setAlert(refs.status, `请先补全第 ${index + 1} 条快报的${failed.label}。`, 'error', { autoHideMs: 4200 });
+      focusNewsField(refs, item.id, failed.field);
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function confirmSave(label) {
+  return window.confirm(`确定要保存${label}吗？保存后前台内容会立即更新。`);
+}
+
+async function saveRankings(refs, options = {}) {
+  const { confirm = true } = options;
+
+  if (!validateRankingsForSave(refs)) return false;
+  if (confirm && !confirmSave('排行榜内容')) return false;
+
   const db = await getFirebaseFirestore();
   const firestore = await getFirebaseFirestoreModule();
 
   if (!db || !firestore || !state.user) {
-    setAlert(refs.status, 'Firebase 连接未完成，暂时无法保存。', 'error');
-    return;
+    setAlert(refs.status, '服务暂时不可用，当前无法保存。', 'error');
+    return false;
   }
 
-  refs.saveButton.disabled = true;
-  refs.saveButton.textContent = '正在保存...';
+  refs.rankings.saveButton.disabled = true;
+  refs.rankings.saveButton.textContent = '正在保存...';
 
   try {
     const actor = {
@@ -224,14 +506,137 @@ async function saveRankings(refs) {
 
     const payload = buildRankingsDocument(state.rankings, actor, firestore.serverTimestamp());
     await firestore.setDoc(firestore.doc(db, 'siteContent', 'rankings'), payload, { merge: true });
-    await refreshRankings(refs, '榜单已保存到 Firestore。');
+    await refreshRankings(refs, '排行榜已成功保存。');
+    return true;
   } catch (error) {
     console.error('Unable to save rankings.', error);
-    setAlert(refs.status, '保存失败，请检查 Firestore 规则与管理员权限。', 'error');
+    setAlert(refs.status, '保存失败，请稍后重试或联系管理员。', 'error');
+    return false;
   } finally {
-    refs.saveButton.disabled = false;
-    renderEditor(refs);
+    refs.rankings.saveButton.disabled = false;
+    renderRankings(refs);
   }
+}
+
+async function saveNews(refs, options = {}) {
+  const { confirm = true } = options;
+
+  if (!validateNewsForSave(refs)) return false;
+  if (confirm && !confirmSave('快报公告内容')) return false;
+
+  const db = await getFirebaseFirestore();
+  const firestore = await getFirebaseFirestoreModule();
+
+  if (!db || !firestore || !state.user) {
+    setAlert(refs.status, '服务暂时不可用，当前无法保存。', 'error');
+    return false;
+  }
+
+  refs.news.saveButton.disabled = true;
+  refs.news.saveButton.textContent = '正在保存...';
+
+  try {
+    const actor = {
+      uid: state.user.uid,
+      email: state.user.email || '',
+      displayName: state.user.displayName || ''
+    };
+
+    const payload = buildNewsDocument(state.newsItems, actor, firestore.serverTimestamp());
+    await firestore.setDoc(firestore.doc(db, 'siteContent', 'news'), payload, { merge: true });
+    await refreshNews(refs, '快报内容已成功保存。');
+    return true;
+  } catch (error) {
+    console.error('Unable to save news.', error);
+    setAlert(refs.status, '保存失败，请稍后重试或联系管理员。', 'error');
+    return false;
+  } finally {
+    refs.news.saveButton.disabled = false;
+    renderNews(refs);
+  }
+}
+
+function showUnsavedChangesDialog(mode) {
+  const label = getModeLabel(mode);
+
+  return new Promise((resolve) => {
+    const overlay = document.createElement('div');
+    overlay.className = 'admin-confirm-backdrop';
+    overlay.innerHTML = `
+      <section class="admin-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-unsaved-title">
+        <p class="admin-card-kicker">Unsaved Changes</p>
+        <h2 id="admin-unsaved-title">您有尚未保存的${label}修改</h2>
+        <p>离开前请选择如何处理这些修改。保存后会立即更新前台内容；放弃则恢复为最近一次保存的数据。</p>
+        <div class="admin-confirm-actions">
+          <button class="auth-submit admin-save-button" type="button" data-unsaved-action="save">保存并返回</button>
+          <button class="text-button admin-danger-button" type="button" data-unsaved-action="discard">放弃更改</button>
+          <button class="text-button" type="button" data-unsaved-action="cancel">取消</button>
+        </div>
+      </section>
+    `;
+
+    const cleanup = (action) => {
+      window.removeEventListener('keydown', onKeyDown);
+      overlay.remove();
+      resolve(action);
+    };
+
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') cleanup('cancel');
+    };
+
+    overlay.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-unsaved-action]')?.dataset.unsavedAction;
+      if (action) cleanup(action);
+    });
+
+    window.addEventListener('keydown', onKeyDown);
+    document.body.append(overlay);
+    overlay.querySelector('[data-unsaved-action="cancel"]')?.focus();
+  });
+}
+
+async function saveContentMode(refs, mode) {
+  if (mode === 'rankings') return saveRankings(refs, { confirm: false });
+  if (mode === 'news') return saveNews(refs, { confirm: false });
+  return true;
+}
+
+async function discardContentMode(refs, mode) {
+  if (mode === 'rankings') {
+    await refreshRankings(refs);
+    return true;
+  }
+
+  if (mode === 'news') {
+    await refreshNews(refs);
+    return true;
+  }
+
+  return true;
+}
+
+async function requestContentMode(refs, mode, options = {}) {
+  const currentMode = state.contentMode;
+
+  if (hasUnsavedChanges(currentMode) && currentMode !== mode) {
+    const action = await showUnsavedChangesDialog(currentMode);
+
+    if (action === 'cancel') return false;
+
+    if (action === 'save') {
+      const saved = await saveContentMode(refs, currentMode);
+      if (!saved) return false;
+    }
+
+    if (action === 'discard') {
+      await discardContentMode(refs, currentMode);
+      setAlert(refs.status, `${getModeLabel(currentMode)}修改已放弃。`, 'success', { autoHideMs: 2600 });
+    }
+  }
+
+  setContentMode(refs, mode, options);
+  return true;
 }
 
 function wirePasswordToggles() {
@@ -247,91 +652,206 @@ function wirePasswordToggles() {
   });
 }
 
-function wireEditorEvents(refs) {
-  refs.categoryTabs?.addEventListener('click', (event) => {
+function wireRankingsEditorEvents(refs) {
+  refs.rankings.categoryTabs?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-admin-category]');
     if (!button) return;
 
     state.activeCategory = button.dataset.adminCategory || defaultRankingCategoryKey;
-    renderEditor(refs);
+    renderRankings(refs);
   });
 
-  refs.rowList?.addEventListener('input', (event) => {
+  refs.rankings.rowList?.addEventListener('input', (event) => {
     const field = event.target.dataset.adminField;
     const row = event.target.closest('[data-entry-id]');
     if (!field || !row) return;
 
-    const entries = getActiveEntries();
-    const entry = entries.find((item) => item.id === row.dataset.entryId);
+    const entry = getActiveRankingEntries().find((item) => item.id === row.dataset.entryId);
     if (!entry) return;
 
     entry[field] = field === 'position' || field === 'score'
       ? Number(event.target.value || 0)
       : event.target.value;
 
-    markDirty();
-    renderPreview(refs);
-    if (refs.saveButton) refs.saveButton.textContent = '保存榜单 *';
+    markDirty('rankings');
+    renderRankingPreview(refs);
+    if (refs.rankings.saveButton) refs.rankings.saveButton.textContent = '保存榜单 *';
   });
 
-  refs.rowList?.addEventListener('change', (event) => {
-    const field = event.target.dataset.adminField;
-    if (!field) return;
-
-    state.rankings[state.activeCategory] = sortEntries(getActiveEntries());
-    renderEditor(refs);
+  refs.rankings.rowList?.addEventListener('change', (event) => {
+    if (!event.target.dataset.adminField) return;
+    state.rankings[state.activeCategory] = sortRankingEntries(getActiveRankingEntries());
+    renderRankings(refs);
   });
 
-  refs.rowList?.addEventListener('click', (event) => {
+  refs.rankings.rowList?.addEventListener('click', (event) => {
     const button = event.target.closest('[data-admin-remove-row]');
     if (!button) return;
 
-    state.rankings[state.activeCategory] = getActiveEntries().filter((entry) => entry.id !== button.dataset.adminRemoveRow);
-    state.rankings[state.activeCategory] = sortEntries(getActiveEntries());
-    markDirty();
-    renderEditor(refs);
+    state.rankings[state.activeCategory] = getActiveRankingEntries().filter((entry) => entry.id !== button.dataset.adminRemoveRow);
+    state.rankings[state.activeCategory] = sortRankingEntries(getActiveRankingEntries());
+    markDirty('rankings');
+    renderRankings(refs);
   });
 
-  document.querySelector('[data-admin-add-row]')?.addEventListener('click', () => {
-    const nextEntries = [...getActiveEntries(), createEmptyRankingEntry(state.activeCategory, getActiveEntries().length)];
+  refs.rankings.addButton?.addEventListener('click', () => {
+    const nextEntries = [...getActiveRankingEntries(), createEmptyRankingEntry(state.activeCategory, getActiveRankingEntries().length)];
     state.rankings[state.activeCategory] = nextEntries;
-    markDirty();
-    renderEditor(refs);
+    markDirty('rankings');
+    renderRankings(refs);
   });
 
   document.querySelector('[data-admin-reload]')?.addEventListener('click', async () => {
-    await refreshRankings(refs, '已重新读取云端榜单。');
+    await refreshRankings(refs, '排行榜内容已刷新。');
   });
 
   document.querySelector('[data-admin-load-sample]')?.addEventListener('click', () => {
     state.rankings = getFallbackRankings();
-    state.updatedAt = null;
-    markDirty();
-    renderEditor(refs);
-    setAlert(refs.status, '已恢复示例数据，记得点击“保存榜单”发布到云端。', 'success');
+    state.rankingsUpdatedAt = null;
+    markDirty('rankings');
+    renderRankings(refs);
+    setAlert(refs.status, '示例榜单已载入，保存后将覆盖当前线上数据。', 'success', { autoHideMs: 2600 });
   });
 
-  refs.saveButton?.addEventListener('click', async () => {
+  refs.rankings.saveButton?.addEventListener('click', async () => {
     await saveRankings(refs);
   });
 }
 
-async function bootAdminPage() {
-  await initClickSound();
-  initLeafCanvas();
+function wireNewsEditorEvents(refs) {
+  refs.news.filterTabs?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-admin-news-filter]');
+    if (!button) return;
 
+    state.activeNewsFilter = button.dataset.adminNewsFilter || '全部';
+    renderNews(refs);
+  });
+
+  refs.news.rowList?.addEventListener('input', (event) => {
+    const field = event.target.dataset.adminNewsField;
+    const row = event.target.closest('[data-news-id]');
+    if (!field || !row) return;
+
+    const item = state.newsItems.find((entry) => entry.id === row.dataset.newsId);
+    if (!item) return;
+
+    item[field] = event.target.value;
+    if (field === 'bodyDraft') {
+      item.body = editorTextToHtml(item.bodyDraft);
+    }
+
+    markDirty('news');
+    renderNewsPreview(refs);
+    if (refs.news.saveButton) refs.news.saveButton.textContent = '保存快报 *';
+  });
+
+  refs.news.rowList?.addEventListener('change', (event) => {
+    const field = event.target.dataset.adminNewsField;
+    const row = event.target.closest('[data-news-id]');
+    if (!field || !row) return;
+
+    const item = state.newsItems.find((entry) => entry.id === row.dataset.newsId);
+    if (!item) return;
+
+    if (field === 'bodyDraft') {
+      item.body = editorTextToHtml(item.bodyDraft);
+      return;
+    }
+
+    item[field] = event.target.value;
+    markDirty('news');
+    if (refs.news.saveButton) refs.news.saveButton.textContent = '保存快报 *';
+
+    if (field === 'date' || field === 'category') {
+      state.newsItems = sortNewsItems(state.newsItems);
+      renderNews(refs);
+    }
+  });
+
+  refs.news.rowList?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-admin-news-remove-row]');
+    if (!button) return;
+
+    state.newsItems = state.newsItems.filter((item) => item.id !== button.dataset.adminNewsRemoveRow);
+    markDirty('news');
+    renderNews(refs);
+  });
+
+  refs.news.addButton?.addEventListener('click', () => {
+    const nextItem = createEmptyNewsItem(state.newsItems.length);
+    if (state.activeNewsFilter !== '全部') {
+      nextItem.category = state.activeNewsFilter;
+    }
+
+    state.newsItems = sortNewsItems([...state.newsItems, nextItem]);
+    markDirty('news');
+    renderNews(refs);
+  });
+
+  document.querySelector('[data-admin-news-reload]')?.addEventListener('click', async () => {
+    await refreshNews(refs, '快报内容已刷新。');
+  });
+
+  document.querySelector('[data-admin-news-load-sample]')?.addEventListener('click', () => {
+    state.newsItems = getFallbackNewsItems();
+    state.newsUpdatedAt = null;
+    markDirty('news');
+    renderNews(refs);
+    setAlert(refs.status, '示例快报已载入，保存后将覆盖当前线上数据。', 'success', { autoHideMs: 2600 });
+  });
+
+  refs.news.saveButton?.addEventListener('click', async () => {
+    await saveNews(refs);
+  });
+}
+
+function wireContentModeEvents(refs) {
+  refs.dashboardOpenButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      await requestContentMode(refs, button.dataset.adminOpenMode || 'dashboard', { history: 'push' });
+    });
+  });
+
+  refs.backButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      await requestContentMode(refs, 'dashboard', { history: 'replace' });
+    });
+  });
+
+  window.addEventListener('popstate', async () => {
+    const currentMode = state.contentMode;
+    const targetMode = state.isAdmin ? getModeFromLocation() : 'dashboard';
+    const changed = await requestContentMode(refs, targetMode);
+
+    if (!changed) {
+      writeModeHistory(currentMode, 'push');
+    }
+  });
+
+  window.addEventListener('beforeunload', (event) => {
+    if (!hasAnyUnsavedChanges()) return;
+
+    event.preventDefault();
+    event.returnValue = '';
+  });
+}
+
+async function bootAdminPage() {
   const refs = createReferences();
   const auth = await getFirebaseAuth();
   const authModule = await getFirebaseAuthModule();
 
   if (!auth || !authModule) {
-    setAlert(refs.status, '请先完成 js/shared/firebase-config.js 配置后再使用后台。', 'error');
+    setAlert(refs.status, '后台服务暂时不可用，请稍后再试。', 'error');
     return;
   }
 
   wirePasswordToggles();
-  wireEditorEvents(refs);
-  renderEditor(refs);
+  wireContentModeEvents(refs);
+  wireRankingsEditorEvents(refs);
+  wireNewsEditorEvents(refs);
+  setContentMode(refs, 'dashboard', { history: 'replace' });
+  renderAdmin(refs);
   renderSession(refs);
 
   refs.loginForm?.addEventListener('submit', async (event) => {
@@ -341,7 +861,7 @@ async function bootAdminPage() {
     const password = refs.loginForm.elements.namedItem('password')?.value || '';
 
     if (!email || !password) {
-      setAlert(refs.loginAlert, '请输入邮箱和密码。', 'error');
+      setAlert(refs.loginAlert, '请输入邮箱和密码。', 'error', { autoHideMs: 2600 });
       return;
     }
 
@@ -354,7 +874,7 @@ async function bootAdminPage() {
       setAlert(refs.loginAlert, '');
     } catch (error) {
       console.error('Unable to sign in to admin.', error);
-      setAlert(refs.loginAlert, '登录失败，请检查邮箱、密码与 Firebase Auth 设置。', 'error');
+      setAlert(refs.loginAlert, '登录失败，请检查邮箱和密码。', 'error', { autoHideMs: 3200 });
     } finally {
       refs.loginForm.querySelector('[type="submit"]').disabled = false;
     }
@@ -367,28 +887,35 @@ async function bootAdminPage() {
   authModule.onAuthStateChanged(auth, async (user) => {
     state.user = user;
     state.isAdmin = false;
+    setContentMode(refs, 'dashboard', { history: 'replace' });
     renderSession(refs);
 
     if (!user) {
-      setAlert(refs.status, '请先使用管理员邮箱登录。', 'error');
+      setAlert(refs.status, '请先登录后再继续。', 'error');
       return;
     }
 
-    setAlert(refs.status, '正在验证管理员权限...', 'success');
+    setAlert(refs.status, '正在验证访问权限...', 'success');
 
     try {
       state.isAdmin = await isAuthorizedAdmin(user);
       renderSession(refs);
 
       if (!state.isAdmin) {
-        setAlert(refs.status, '当前账号已登录，但尚未进入 admins 白名单。', 'error');
+        setAlert(refs.status, '当前账号暂未获得此工作区的访问权限。', 'error');
         return;
       }
 
-      await refreshRankings(refs, '管理员身份已确认，云端榜单已载入。');
+      await Promise.all([
+        refreshRankings(refs),
+        refreshNews(refs)
+      ]);
+
+      setContentMode(refs, 'dashboard', { history: 'replace' });
+      setAlert(refs.status, '内容已载入，您可以开始编辑。', 'success', { autoHideMs: 2600 });
     } catch (error) {
       console.error('Unable to validate admin access.', error);
-      setAlert(refs.status, '无法验证后台权限，请检查 Firestore 规则。', 'error');
+      setAlert(refs.status, '无法验证访问权限，请稍后重试。', 'error');
     }
   });
 }

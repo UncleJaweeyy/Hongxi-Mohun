@@ -3,40 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="鸿禧墨魂+30 榜单管理后台，用于维护首页风云龙虎榜内容。">
+    <meta name="description" content="鸿禧墨魂+30 内容管理后台，用于维护首页排行榜与江湖快报内容。">
     <meta name="robots" content="noindex, nofollow">
-    <title>榜单管理后台 - 鸿禧墨魂+30</title>
+    <title>内容管理后台 - 鸿禧墨魂+30</title>
 
     <link rel="icon" href="../../assets/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="../../assets/android-chrome-192x192.png">
 
-    <link rel="preload" href="../../assets/images/background_image.webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="preload" href="../../assets/fonts/MaShanZheng-Regular.woff2" as="font" type="font/woff2" crossorigin>
-
     <link rel="stylesheet" href="../../styles.css">
   </head>
   <body class="admin-page">
-    <div class="fixed-scene" aria-hidden="true">
-      <picture class="scene-bg">
-        <img src="../../assets/images/background_image.webp" alt="" fetchpriority="high" decoding="sync">
-      </picture>
-      <div class="scene-shade"></div>
-      <div class="scene-bottom-fade"></div>
-      <canvas class="leaf-canvas" data-leaf-canvas></canvas>
-    </div>
-
     <header class="site-header admin-header">
       <a class="brand" href="../../index.html#home" aria-label="返回首页">
         <span class="brand-mark">墨</span>
         <span class="brand-name">鸿禧墨魂+30</span>
       </a>
       <nav class="site-nav admin-nav" aria-label="后台导航">
-        <a href="../../index.html#rank">查看首页榜单</a>
         <a href="../../index.html#home">返回官网首页</a>
       </nav>
       <div class="auth-actions admin-session-actions" aria-label="后台会话">
-        <span class="admin-session-chip" data-admin-session-label>未登录</span>
         <button type="button" class="auth-primary" data-admin-logout hidden>退出</button>
       </div>
     </header>
@@ -44,32 +30,21 @@
     <main class="admin-main">
       <section class="section framed-section admin-shell" aria-labelledby="admin-title">
         <div class="admin-heading">
-          <p class="admin-kicker">Admin Console</p>
-          <h1 id="admin-title">风云龙虎榜内容管理</h1>
-          <p>编辑首页排行榜内容，并将更新直接同步到线上站点。</p>
+          <p class="admin-kicker">Control Panel</p>
+          <h1 id="admin-title">站点内容管理</h1>
+          <p>集中维护首页排行榜与快报公告内容，调整后可直接更新站点展示。</p>
         </div>
 
         <div class="auth-alert is-hidden admin-status-panel" role="status" aria-live="polite" data-admin-status></div>
 
         <section class="admin-workspace">
-          <div class="admin-session-strip">
-            <div class="admin-session-card">
-              <span class="admin-session-label">当前账号</span>
-              <strong data-admin-email>未登录</strong>
-            </div>
-            <div class="admin-session-card">
-              <span class="admin-session-label">UID</span>
-              <code class="admin-code" data-admin-uid>等待登录</code>
-            </div>
-          </div>
-
           <div class="admin-login-card" data-admin-login-panel>
             <div class="admin-card-heading">
               <div>
-                <p class="admin-card-kicker">Authentication</p>
+                <p class="admin-card-kicker">Secure Access</p>
                 <h2>管理员登录</h2>
               </div>
-              <p>使用已启用的 Firebase Auth 邮箱账号登录。</p>
+              <p>登录后即可进入内容管理工作区。</p>
             </div>
 
             <form class="admin-form" data-admin-login-form novalidate>
@@ -103,50 +78,123 @@
                 <h2>账号已登录，等待授权</h2>
               </div>
             </div>
-            <p>当前账号已经登录，但还没有后台编辑权限。请将上方显示的 UID 加入 Firestore 管理员白名单后再刷新此页面。</p>
+            <p>当前账号已经登录，但暂未获得此工作区的编辑权限。请联系管理员开通后再刷新此页面。</p>
           </div>
 
           <div class="admin-editor" data-admin-editor-panel hidden>
-            <div class="admin-toolbar">
-              <div class="admin-toolbar-head">
+            <section class="admin-dashboard" data-admin-dashboard-panel>
+              <div class="admin-card-heading">
                 <div>
-                  <p class="admin-card-kicker">Content</p>
-                  <h2 data-admin-category-label>世界头目</h2>
+                  <p class="admin-card-kicker">Workspace</p>
+                  <h2>选择管理内容</h2>
                 </div>
-                <div class="admin-toolbar-actions">
-                  <button class="text-button" type="button" data-admin-reload>重新读取</button>
-                  <button class="text-button" type="button" data-admin-load-sample>恢复示例</button>
-                  <button class="auth-submit admin-save-button" type="button" data-admin-save>保存榜单</button>
-                </div>
+                <p>登录成功后，请先进入需要维护的内容工作区。</p>
               </div>
 
-              <div class="segmented-control admin-category-tabs" role="tablist" aria-label="榜单分类" data-admin-category-tabs></div>
-            </div>
+              <div class="admin-dashboard-grid">
+                <button class="admin-dashboard-card" type="button" data-admin-open-mode="rankings">
+                  <span class="admin-dashboard-kicker">Rankings</span>
+                  <strong>排行榜管理</strong>
+                  <span>维护首页风云龙虎榜各分类榜单与排序内容。</span>
+                </button>
 
-            <div class="admin-editor-layout">
-              <section class="admin-editor-card">
-                <div class="admin-editor-card-head">
+                <button class="admin-dashboard-card" type="button" data-admin-open-mode="news">
+                  <span class="admin-dashboard-kicker">Announcements</span>
+                  <strong>快报公告管理</strong>
+                  <span>维护首页快报与完整公告列表、正文和发布时间。</span>
+                </button>
+              </div>
+            </section>
+
+            <section class="admin-content-panel" data-admin-content-panel="rankings" hidden>
+              <button class="text-button admin-view-back" type="button" data-admin-back-dashboard>返回工作台</button>
+
+              <div class="admin-toolbar">
+                <div class="admin-toolbar-head">
                   <div>
-                    <p class="admin-card-kicker">Editor</p>
-                    <h2>榜单条目</h2>
+                    <p class="admin-card-kicker">Content</p>
+                    <h2 data-admin-category-label>世界头目</h2>
                   </div>
-                  <button class="text-button" type="button" data-admin-add-row>新增一行</button>
+                  <div class="admin-toolbar-actions">
+                    <button class="text-button" type="button" data-admin-reload>重新读取</button>
+                    <button class="text-button" type="button" data-admin-load-sample>恢复示例</button>
+                    <button class="auth-submit admin-save-button" type="button" data-admin-save>保存榜单</button>
+                  </div>
                 </div>
 
-                <div class="admin-row-list" data-admin-row-list></div>
-              </section>
+                <div class="segmented-control admin-category-tabs" role="tablist" aria-label="榜单分类" data-admin-category-tabs></div>
+              </div>
 
-              <aside class="admin-preview-card">
-                <div class="admin-card-heading">
+              <div class="admin-editor-layout">
+                <section class="admin-editor-card">
+                  <div class="admin-editor-card-head">
+                    <div>
+                      <p class="admin-card-kicker">Editor</p>
+                      <h2>榜单条目</h2>
+                    </div>
+                    <button class="text-button" type="button" data-admin-add-row>新增一行</button>
+                  </div>
+
+                  <div class="admin-row-list" data-admin-row-list></div>
+                </section>
+
+                <aside class="admin-preview-card">
+                  <div class="admin-card-heading">
+                    <div>
+                      <p class="admin-card-kicker">Preview</p>
+                      <h2>前台预览</h2>
+                    </div>
+                  </div>
+                  <ol class="admin-preview-list" data-admin-preview-list></ol>
+                  <p class="admin-preview-meta" data-admin-updated-meta>尚未载入最新内容。</p>
+                </aside>
+              </div>
+            </section>
+
+            <section class="admin-content-panel" data-admin-content-panel="news" hidden>
+              <button class="text-button admin-view-back" type="button" data-admin-back-dashboard>返回工作台</button>
+
+              <div class="admin-toolbar">
+                <div class="admin-toolbar-head">
                   <div>
-                    <p class="admin-card-kicker">Preview</p>
-                    <h2>前台预览</h2>
+                    <p class="admin-card-kicker">Announcements</p>
+                    <h2>江湖快报</h2>
+                  </div>
+                  <div class="admin-toolbar-actions">
+                    <button class="text-button" type="button" data-admin-news-reload>重新读取</button>
+                    <button class="text-button" type="button" data-admin-news-load-sample>恢复示例</button>
+                    <button class="auth-submit admin-save-button" type="button" data-admin-news-save>保存快报</button>
                   </div>
                 </div>
-                <ol class="admin-preview-list" data-admin-preview-list></ol>
-                <p class="admin-preview-meta" data-admin-updated-meta>尚未从云端读取数据。</p>
-              </aside>
-            </div>
+
+                <div class="segmented-control admin-category-tabs" role="tablist" aria-label="快报分类" data-admin-news-filter-tabs></div>
+              </div>
+
+              <div class="admin-editor-layout">
+                <section class="admin-editor-card">
+                  <div class="admin-editor-card-head">
+                    <div>
+                      <p class="admin-card-kicker">Editor</p>
+                      <h2>快报条目</h2>
+                    </div>
+                    <button class="text-button" type="button" data-admin-news-add-row>新增快报</button>
+                  </div>
+
+                  <div class="admin-row-list" data-admin-news-row-list></div>
+                </section>
+
+                <aside class="admin-preview-card">
+                  <div class="admin-card-heading">
+                    <div>
+                      <p class="admin-card-kicker">Preview</p>
+                      <h2>前台预览</h2>
+                    </div>
+                  </div>
+                  <ol class="admin-preview-list" data-admin-news-preview-list></ol>
+                  <p class="admin-preview-meta" data-admin-news-updated-meta>尚未载入最新内容。</p>
+                </aside>
+              </div>
+            </section>
           </div>
         </section>
       </section>

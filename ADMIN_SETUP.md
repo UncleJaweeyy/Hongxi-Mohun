@@ -1,6 +1,6 @@
 # Admin Setup
 
-This project uses Firebase Authentication plus Cloud Firestore for the ranking admin panel.
+This project uses Firebase Authentication plus Cloud Firestore for the ranking and news admin panel.
 
 ## Firestore schema
 
@@ -23,6 +23,28 @@ This project uses Firebase Authentication plus Cloud Firestore for the ranking a
       ]
     }
   },
+  "updatedAt": "serverTimestamp()",
+  "updatedBy": {
+    "uid": "firebase-auth-uid",
+    "email": "admin@example.com",
+    "displayName": "运营"
+  }
+}
+```
+
+### `siteContent/news`
+
+```json
+{
+  "items": [
+    {
+      "id": "news-2026-04-06-v125",
+      "category": "公告",
+      "title": "《鸿禧墨魂+30》V1.2.5版本更新维护公告",
+      "date": "2026-04-06",
+      "body": "<p>公告正文 HTML</p>"
+    }
+  ],
   "updatedAt": "serverTimestamp()",
   "updatedBy": {
     "uid": "firebase-auth-uid",
@@ -60,4 +82,4 @@ This project uses Firebase Authentication plus Cloud Firestore for the ranking a
 
 4. Deploy Firestore rules with `firebase deploy --only firestore`.
 
-After that, the client can sign in at `/pages/admin/` and edit the rankings directly.
+After that, the client can sign in at `/pages/admin/` and edit the rankings and 快报内容 directly.
