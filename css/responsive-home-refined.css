@@ -1,0 +1,206 @@
+/* Medium screens for refined sections: stack feature/class layouts and simplify ranks. */
+@media (max-width: 900px) {
+  .feature-item,
+  .feature-item--reverse,
+  .class-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .feature-item--reverse .feature-visual,
+  .feature-item--reverse .feature-copy {
+    order: initial;
+  }
+
+  .feature-reveal-ready .feature-item .feature-visual,
+  .feature-reveal-ready .feature-item .feature-copy,
+  .feature-reveal-ready .feature-item--reverse .feature-visual,
+  .feature-reveal-ready .feature-item--reverse .feature-copy {
+    transform: translateY(38px);
+  }
+
+  .feature-reveal-ready .feature-item.is-visible .feature-visual,
+  .feature-reveal-ready .feature-item.is-visible .feature-copy {
+    transform: translateY(0);
+  }
+
+  .weapon-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .weapon-tabs button {
+    min-height: 58px;
+    justify-content: center;
+  }
+
+  .weapon-tabs span {
+    display: none;
+  }
+
+  .rank-header,
+  .rank-row {
+    grid-template-columns: 50px minmax(0, 1fr) minmax(88px, auto);
+  }
+
+  .rank-header span:nth-child(3),
+  .rank-school {
+    display: none;
+  }
+}
+
+/* Small screens for refined sections: tighter padding, one visible gallery slide,
+   compact ranking rows, and stacked news item content. */
+@media (max-width: 680px) {
+  .fixed-scene::before {
+    inset: -6vh -44vw;
+    opacity: 0.28;
+    background-size:
+      104vw auto,
+      92vw auto,
+      108vw auto;
+    filter: saturate(0.82) brightness(1.06) drop-shadow(0 0 20px rgba(255, 231, 170, 0.16));
+  }
+
+  .fixed-scene::after {
+    inset: -2vh -48vw;
+    opacity: 0.32;
+    background-size:
+      116vw auto,
+      102vw auto,
+      122vw auto;
+    filter: blur(1.4px) saturate(0.82) brightness(1.08) drop-shadow(0 0 24px rgba(255, 222, 155, 0.18));
+  }
+
+  .feature-showcase {
+    padding-top: 4rem;
+  }
+
+  .feature-item {
+    min-height: auto;
+    padding: 0.85rem;
+  }
+
+  .feature-visual {
+    min-height: 210px;
+  }
+
+  .framed-section {
+    width: min(var(--section-rail), calc(100% - 1rem));
+    padding: 3rem 0.85rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .rank-list {
+    min-height: 0;
+  }
+
+  .rank-header {
+    font-size: 0.86rem;
+  }
+
+  .rank-row {
+    min-height: 60px;
+    padding: 0.75rem 0.7rem;
+  }
+
+  .rank-score {
+    font-size: 0.86rem;
+  }
+
+  .weapon-tabs {
+    gap: 0.55rem;
+  }
+
+  .weapon-tabs button {
+    min-height: 52px;
+    padding: 0.45rem 0.6rem;
+    transform: skewX(-12deg);
+  }
+
+  .weapon-tabs button > * {
+    transform: skewX(12deg);
+  }
+
+  .class-panel {
+    min-height: 480px;
+  }
+
+  .class-watermark {
+    opacity: 0.72;
+  }
+
+  .gallery-carousel {
+    min-height: 0;
+    perspective: none;
+  }
+
+  .gallery-track {
+    height: 285px;
+  }
+
+  .gallery-slide {
+    width: min(96vw, 500px);
+  }
+
+  .gallery-slide.is-prev,
+  .gallery-slide.is-next,
+  .gallery-slide.is-far {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.94);
+  }
+
+  .gallery-nav {
+    top: 142px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .news-list-item.news-card {
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+  }
+
+  .news-list-item.news-card h3 {
+    grid-column: 1 / -1;
+    white-space: normal;
+  }
+
+  .news-list-item.news-card time {
+    justify-self: end;
+  }
+
+  .news-page-shell {
+    width: min(100% - 1rem, 980px);
+    padding-top: 5.75rem;
+  }
+
+  .news-filter-tabs {
+    gap: 0.55rem;
+  }
+
+  .news-filter-tabs button {
+    flex: 1 1 calc(50% - 0.55rem);
+    min-width: 0;
+  }
+
+  .news-page-shell .news-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .news-card-title {
+    width: 100%;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .news-page-shell .news-card h2 {
+    white-space: normal;
+  }
+
+  .news-page-shell .news-card time {
+    align-self: flex-end;
+  }
+}
+

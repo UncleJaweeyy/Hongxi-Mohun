@@ -1,0 +1,24 @@
+/* ------------------------------------------------------------
+   Refined second-part sections
+   These styles power the newer, reference-inspired homepage blocks from
+   #features through #community. They share the same rail width and spacing.
+------------------------------------------------------------ */
+
+/* Feature showcase: alternating image/text panels for main game features. */
+.feature-showcase {
+  padding-top: var(--section-block-gap);
+  padding-bottom: 0;
+}
+
+.feature-showcase .section-heading {
+  position: relative;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  max-width: 100%;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 45deg;
+}
+

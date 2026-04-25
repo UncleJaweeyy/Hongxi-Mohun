@@ -1,0 +1,210 @@
+/* ------------------------------------------------------------
+   Mobile layout adjustments
+   Collapses grids to one column, tightens hero sizing, and positions
+   floating controls for small screens.
+------------------------------------------------------------ */
+@media (max-width: 680px) {
+  .brand-name {
+    max-width: 11.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hero {
+    min-height: 92svh;
+    align-items: center;
+    justify-items: center;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero-content {
+    width: min(34rem, 100%);
+    margin-left: 0;
+    transform: translateY(1.15rem);
+  }
+
+  .hero-logo-wrap {
+    --logo-entry-distance: min(18rem, 50vw);
+    width: min(31rem, 88vw);
+  }
+
+  .hero-title {
+    margin-top: 0.35rem;
+    margin-bottom: 2.25rem;
+    font-size: 1.18rem;
+    word-spacing: 0.8rem;
+  }
+
+  .hero-button {
+    min-height: 54px;
+    min-width: 172px;
+    padding: 0.9rem 3.25rem;
+    font-size: 1.18rem;
+  }
+
+  .auth-form--register.is-active {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-lines {
+    font-size: 1.35rem;
+    letter-spacing: 0.28em;
+  }
+
+  .hero-lines span {
+    top: 35%;
+  }
+
+  .hero-lines span:nth-child(1) {
+    left: 0.45rem;
+    right: auto;
+  }
+
+  .hero-lines span:nth-child(2) {
+    right: 0.55rem;
+  }
+
+  .section {
+    width: min(var(--section-rail), calc(100% - 1rem));
+  }
+
+  .section-ink {
+    padding-inline: 0.5rem;
+  }
+
+  .feature-grid,
+  .gallery-strip,
+  .news-list--teaser,
+  .news-list--page,
+  .class-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .weapon-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .site-footer {
+    padding-bottom: 5rem;
+  }
+
+  .guides-page-shell {
+    width: min(100% - 1rem, 1210px);
+    padding-top: 6rem;
+  }
+
+  .guide-back-link {
+    top: 1rem;
+    left: 1rem;
+    padding-inline: 0.85rem;
+    font-size: 0.98rem;
+  }
+
+  .guides-heading {
+    margin-bottom: 2rem;
+  }
+
+  .guides-heading h1 {
+    font-size: clamp(2.35rem, 12vw, 3.2rem);
+    letter-spacing: 0.12em;
+    text-indent: 0.12em;
+  }
+
+  .guides-heading p {
+    padding-inline: 0.35rem;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+  }
+
+  .guides-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .guide-card {
+    min-height: 176px;
+    padding: 1.45rem;
+  }
+
+  .guide-detail {
+    padding: 1.2rem;
+  }
+
+  .guide-list-back {
+    margin-bottom: 2rem;
+    padding-inline: 0.85rem;
+    font-size: 0.98rem;
+  }
+
+  .guide-detail-header h1 {
+    font-size: clamp(1.8rem, 9vw, 2.35rem);
+    letter-spacing: 0.04em;
+  }
+
+  .guide-detail-header p {
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .guide-detail-body {
+    font-size: 1.02rem;
+  }
+
+  .footer-inner {
+    gap: 1.6rem;
+  }
+
+  .footer-links {
+    gap: 0.6rem 0.9rem;
+  }
+
+  .back-top {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .download-page-shell {
+    width: min(100% - 1rem, 520px);
+    align-items: start;
+    padding-top: 6rem;
+  }
+
+  .download-back-link {
+    top: 1rem;
+    left: 1rem;
+    padding-inline: 0.85rem;
+    font-size: 0.98rem;
+  }
+
+  .download-heading {
+    margin-bottom: 1.8rem;
+  }
+
+  .download-heading h1 {
+    font-size: clamp(2.35rem, 12vw, 3.2rem);
+    letter-spacing: 0.1em;
+    text-indent: 0.1em;
+  }
+
+  .download-heading p {
+    padding-inline: 0.35rem;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+  }
+
+  .download-client-card {
+    min-height: 300px;
+    padding: 1.5rem;
+  }
+
+  .download-client-card p {
+    max-width: none;
+    margin-bottom: 1.35rem;
+  }
+
+  .download-version {
+    right: 1.2rem;
+  }
+}
+

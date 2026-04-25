@@ -1,0 +1,77 @@
+/* Running border stroke for the dark translucent panels.
+   It stays hidden by default, then runs one cycle when JS adds
+   .border-stroke-run or when the panel receives keyboard focus. */
+.feature-item::after,
+.framed-section::after,
+.gallery-slide::after,
+.guide-card::after,
+.download-client-card::after,
+.auth-dialog::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg 42deg,
+    rgba(216, 177, 92, 0.18) 54deg,
+    rgba(255, 205, 115, 0.95) 66deg,
+    rgba(216, 177, 92, 0.9) 80deg,
+    transparent 100deg 210deg,
+    rgba(216, 177, 92, 0.18) 222deg,
+    rgba(255, 205, 115, 0.95) 234deg,
+    rgba(216, 177, 92, 0.9) 248deg,
+    transparent 268deg 360deg
+  );
+  pointer-events: none;
+  opacity: 0;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.feature-item.border-stroke-run::after,
+.framed-section.border-stroke-run::after,
+.gallery-slide.border-stroke-run::after,
+.guide-card.border-stroke-run::after,
+.download-client-card.border-stroke-run::after,
+.auth-dialog.border-stroke-run::after,
+.feature-item:focus-within::after,
+.framed-section:focus-within::after,
+.gallery-slide:hover::after,
+.gallery-slide:focus-within::after,
+.guide-card:focus-within::after,
+.download-client-card:focus-within::after,
+.auth-dialog:focus-within::after {
+  animation: running-border-stroke 3.1s linear 1;
+}
+
+@keyframes running-border-stroke {
+  0% {
+    --border-angle: 45deg;
+    opacity: 0;
+  }
+
+  12%,
+  84% {
+    opacity: 0.86;
+  }
+
+  to {
+    --border-angle: 405deg;
+    opacity: 0;
+  }
+}
+
+.feature-story {
+  display: grid;
+  gap: var(--section-block-gap);
+}
+

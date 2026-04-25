@@ -1,0 +1,454 @@
+/* ------------------------------------------------------------
+   Hero section
+   First viewport presentation with the main logo, tagline, CTA button,
+   and decorative vertical poem lines.
+------------------------------------------------------------ */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  justify-items: start;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 7.5rem clamp(1.25rem, 6vw, 6rem) 6rem;
+}
+
+.hero::after {
+  content: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  width: min(53rem, 53vw);
+  max-width: none;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  margin-left: clamp(0rem, 2.6vw, 2.75rem);
+  transform: translateY(-0.35rem);
+}
+
+.eyebrow {
+  margin: 0 0 0.85rem;
+  color: var(--jade);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section-heading h1,
+.section-heading h2,
+.guides-heading h1,
+.download-heading h1 {
+  margin: 0;
+  font-family: "Ma Shan Zheng", serif;
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.hero h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.hero-logo-wrap {
+  --logo-entry-distance: min(23rem, 41vw);
+  position: relative;
+  display: block;
+  width: min(50rem, 52vw);
+  aspect-ratio: 3198 / 1458;
+  line-height: 0;
+  filter: drop-shadow(0 18px 34px rgba(0, 0, 0, 0.38));
+  transform: translateZ(0);
+}
+
+.hero-logo-layer {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+}
+
+.hero-logo-layer--big-cloud {
+  z-index: 1;
+}
+
+.hero-logo-layer--small-cloud {
+  z-index: 2;
+}
+
+.hero-logo-layer--title {
+  z-index: 3;
+  overflow: hidden;
+}
+
+.hero-logo-layer--title img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hero-logo-layer--title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0 35%,
+      rgba(255, 255, 255, 0.18) 42%,
+      rgba(117, 233, 255, 0.82) 48%,
+      rgba(255, 244, 194, 0.9) 52%,
+      rgba(117, 233, 255, 0.28) 58%,
+      transparent 66% 100%
+    )
+    -80% 0 / 44% 100% no-repeat;
+  filter: blur(0.3px) drop-shadow(0 0 10px rgba(92, 219, 255, 0.65));
+  mix-blend-mode: screen;
+  pointer-events: none;
+  -webkit-mask: url("../assets/images/title_logo/title_logo.webp") center / contain no-repeat;
+  mask: url("../assets/images/title_logo/title_logo.webp") center / contain no-repeat;
+  animation: hero-logo-glare 3.6s ease-in-out 1.35s infinite;
+}
+
+.hero-logo-wrap.is-animating .hero-logo-layer--big-cloud {
+  animation: hero-cloud-left-in 1.36s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.hero-logo-wrap.is-animating .hero-logo-layer--small-cloud {
+  animation: hero-cloud-left-in 1.18s cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+
+.hero-logo-wrap.is-animating .hero-logo-layer--title {
+  animation: hero-title-rise-in 1.18s cubic-bezier(0.18, 1, 0.22, 1) 160ms both;
+}
+
+.hero-title {
+  margin: 0.55rem 0 3.2rem;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(1.45rem, 2.45vw, 2.35rem);
+  word-spacing: 1.4rem;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.72);
+}
+
+.hero-button,
+.section-button,
+.discord-button,
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.8rem 3.25rem;
+  border: 1px solid rgba(196, 20, 28, 0.62);
+  background: rgba(173, 22, 25, 0.9);
+  color: #fff5d8;
+  box-shadow: 0 18px 42px rgba(93, 23, 22, 0.38);
+  font-family: "Ma Shan Zheng", serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.hero-button {
+  --border-angle: 45deg;
+  position: relative;
+  min-height: 58px;
+  min-width: 190px;
+  padding: 1rem 4.2rem;
+  border-color: rgba(216, 177, 92, 0.78);
+  border-radius: 5px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 221, 132, 0.3), transparent 58%),
+    linear-gradient(135deg, rgba(166, 24, 25, 0.96), rgba(105, 12, 16, 0.98));
+  box-shadow:
+    0 0 26px rgba(216, 177, 92, 0.38),
+    0 20px 50px rgba(93, 23, 22, 0.48),
+    inset 0 0 20px rgba(255, 220, 144, 0.12);
+  overflow: hidden;
+  isolation: isolate;
+  font-size: clamp(1.45rem, 2.45vw, 2.35rem);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background 220ms ease;
+}
+
+.hero-button::before,
+.hero-button::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero-button::before {
+  top: -55%;
+  bottom: -55%;
+  left: -75%;
+  z-index: 1;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.52), rgba(255, 219, 126, 0.46), transparent);
+  transform: translateX(-90%) skewX(-20deg);
+  animation: hero-button-glare 2.7s ease-in-out infinite;
+}
+
+.hero-button::after {
+  inset: 0;
+  z-index: 3;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg 40deg,
+    rgba(255, 205, 115, 0.2) 54deg,
+    rgba(255, 242, 188, 0.98) 68deg,
+    rgba(217, 36, 49, 0.88) 82deg,
+    transparent 106deg 210deg,
+    rgba(255, 205, 115, 0.22) 224deg,
+    rgba(255, 242, 188, 0.98) 238deg,
+    rgba(217, 36, 49, 0.88) 252deg,
+    transparent 276deg 360deg
+  );
+  opacity: 0.9;
+  filter: drop-shadow(0 0 12px rgba(255, 205, 115, 0.62));
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: hero-running-border 3s linear infinite;
+}
+
+.hero-button span {
+  position: relative;
+  z-index: 2;
+  color: transparent;
+  background: linear-gradient(90deg, #fff9e7, #ffffff 32%, #ffd071 54%, #fff4ca 72%, #fff9e7);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: none;
+  line-height: 1.05;
+  filter: drop-shadow(0 0 10px rgba(255, 216, 122, 0.42));
+  animation: title-shine 3.6s linear infinite;
+}
+
+.hero-button:hover,
+.hero-button:focus-visible {
+  transform: translateY(-2px) scale(1.04);
+  border-color: rgba(255, 242, 188, 0.95);
+  box-shadow:
+    0 0 36px rgba(255, 205, 115, 0.52),
+    0 24px 56px rgba(93, 23, 22, 0.52),
+    inset 0 0 24px rgba(255, 220, 144, 0.18);
+}
+
+.hero-lines {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  color: transparent;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(1.35rem, 2.2vw, 2.55rem);
+  font-weight: 900;
+  letter-spacing: 0.42em;
+  pointer-events: none;
+}
+
+.hero-lines span {
+  display: inline-block;
+  position: absolute;
+  top: 34%;
+  writing-mode: vertical-rl;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.92) 0%,
+    rgba(245, 245, 245, 0.92) 42%,
+    rgba(0, 0, 0, 0.92) 74%,
+    rgba(245, 245, 245, 0.78) 100%
+  );
+  background-size: 100% 220%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.36);
+  animation: vertical-shine 4.8s ease-in-out infinite alternate;
+}
+
+.hero-lines span:nth-child(1) {
+  right: clamp(5.2rem, 8vw, 7.2rem);
+  animation-name: vertical-shine-reverse;
+}
+
+.hero-lines span:nth-child(2) {
+  right: clamp(1.1rem, 4vw, 3rem);
+}
+
+@keyframes vertical-shine {
+  0% {
+    background-position: 0 0%;
+    opacity: 0.58;
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 100%;
+    opacity: 0.72;
+  }
+}
+
+@keyframes vertical-shine-reverse {
+  0% {
+    background-position: 0 100%;
+    opacity: 0.64;
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 0 0%;
+    opacity: 0.72;
+  }
+}
+
+@keyframes hero-cloud-left-in {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translate3d(calc(var(--logo-entry-distance) * -1), 0, 0) scale(0.98);
+  }
+
+  62% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hero-title-rise-in {
+  0% {
+    opacity: 0;
+    filter: blur(7px);
+    transform: translate3d(0, min(18rem, 30vh), 0) scale(0.96);
+  }
+
+  62% {
+    opacity: 1;
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hero-logo-glare {
+  0%,
+  34% {
+    opacity: 0;
+    background-position: -80% 0;
+  }
+
+  43%,
+  58% {
+    opacity: 1;
+  }
+
+  72%,
+  100% {
+    opacity: 0;
+    background-position: 180% 0;
+  }
+}
+
+@keyframes hero-button-glare {
+  0%,
+  34% {
+    transform: translateX(-90%) skewX(-20deg);
+    opacity: 0;
+  }
+
+  48% {
+    opacity: 1;
+  }
+
+  66%,
+  100% {
+    transform: translateX(430%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes hero-running-border {
+  to {
+    --border-angle: 405deg;
+  }
+}
+
+.leaf-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes cloud-drift {
+  0% {
+    transform: translate3d(-5vw, 0, 0) scale(1);
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 0.44;
+  }
+
+  100% {
+    transform: translate3d(9vw, 2vh, 0) scale(1.04);
+    opacity: 0.36;
+  }
+}
+
+@keyframes mist-drift {
+  0% {
+    transform: translate3d(6vw, 1vh, 0) scale(1);
+    opacity: 0.34;
+  }
+
+  48% {
+    opacity: 0.48;
+  }
+
+  100% {
+    transform: translate3d(-8vw, -1.5vh, 0) scale(1.04);
+    opacity: 0.38;
+  }
+}
+

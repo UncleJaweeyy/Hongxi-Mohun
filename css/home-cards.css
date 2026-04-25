@@ -1,0 +1,47 @@
+/* ------------------------------------------------------------
+   Original card/grid components
+   Base card styles for feature cards, guide cards, ranking table fallback,
+   old gallery strip, and generic news cards.
+------------------------------------------------------------ */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  min-height: 260px;
+  padding: 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.feature-icon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1.35rem;
+  border: 1px solid var(--line-cool);
+  color: var(--jade);
+  font-family: "Ma Shan Zheng", serif;
+  font-size: 1.55rem;
+}
+
+.feature-card h3,
+.download-client-card h2 {
+  margin: 0 0 0.75rem;
+  color: #fff1c2;
+  font-size: 1.35rem;
+}
+
+.feature-card p,
+.download-client-card p,
+.class-panel p,
+.class-panel blockquote {
+  margin: 0;
+  color: var(--muted);
+}
+

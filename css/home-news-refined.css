@@ -1,0 +1,60 @@
+/* Refined news teaser: list-style news items inside the framed homepage block. */
+.news-teaser.framed-section {
+  text-align: center;
+}
+
+.news-teaser .news-list--teaser {
+  grid-template-columns: 1fr;
+  width: min(820px, 100%);
+  margin: 0 auto 2rem;
+  text-align: left;
+}
+
+.news-list-item.news-card {
+  min-height: auto;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-color: rgba(244, 239, 225, 0.09);
+  background: rgba(5, 6, 7, 0.32);
+}
+
+.news-list-item.news-card span {
+  color: #ffb4b4;
+  border-color: rgba(239, 68, 68, 0.38);
+  background: rgba(127, 29, 29, 0.5);
+}
+
+.news-list-item.news-card[data-category="活动"] span {
+  color: #b8dcff;
+  border-color: rgba(59, 130, 246, 0.38);
+  background: rgba(30, 64, 175, 0.45);
+}
+
+.news-list-item.news-card h3 {
+  margin: 0;
+  color: rgba(244, 239, 225, 0.86);
+  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.news-list-item.news-card time {
+  color: rgba(244, 239, 225, 0.74);
+  font-size: 1rem;
+}
+
+.news-list-item.news-card:hover h3,
+.news-list-item.news-card:hover time {
+  color: #f5df9c;
+}
+
+.news-button {
+  border-color: rgba(91, 177, 168, 0.42);
+  background: rgba(5, 6, 7, 0.36);
+  box-shadow: inset 0 0 18px rgba(91, 177, 168, 0.08), 0 14px 34px rgba(0, 0, 0, 0.24);
+}
+

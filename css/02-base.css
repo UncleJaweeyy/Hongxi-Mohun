@@ -1,0 +1,53 @@
+/* ------------------------------------------------------------
+   Base reset and document defaults
+   Normalizes box sizing, page scrolling, body typography, links, and buttons.
+------------------------------------------------------------ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  cursor: var(--cursor-default);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Ma Shan Zheng", serif;
+  line-height: 1.6;
+  cursor: var(--cursor-default);
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+}
+
+a,
+button,
+summary,
+select,
+label[for],
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+[type="checkbox"],
+[type="radio"] {
+  cursor: var(--cursor-clickable);
+}
+

@@ -1,0 +1,51 @@
+/* ------------------------------------------------------------
+   Table and empty states
+   Legacy table layout plus reusable placeholder panels for empty content.
+------------------------------------------------------------ */
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+}
+
+table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+}
+
+th {
+  color: var(--gold);
+  font-weight: 800;
+  text-align: left;
+  background: rgba(216, 177, 92, 0.07);
+}
+
+th,
+td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(229, 213, 166, 0.12);
+}
+
+.empty-panel,
+.ink-placeholder,
+.news-empty,
+.article-shell {
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  color: rgba(189, 182, 164, 0.38);
+}
+
+.empty-panel::before,
+.ink-placeholder::before,
+.news-empty::before,
+.article-shell::before {
+  content: "";
+  width: min(220px, 44vw);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(216, 177, 92, 0.45), transparent);
+}
+

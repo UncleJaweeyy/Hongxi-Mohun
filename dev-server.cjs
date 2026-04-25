@@ -21,11 +21,15 @@ http.createServer((request, response) => {
   let pathname = decodeURIComponent(new URL(request.url, `http://${host}`).pathname);
   if (pathname === "/") pathname = "/index.html";
 
-  const file = path.normalize(path.join(root, pathname));
+  let file = path.normalize(path.join(root, pathname));
   if (!file.startsWith(root)) {
     response.writeHead(403);
     response.end("Forbidden");
     return;
+  }
+
+  if (pathname.endsWith("/")) {
+    file = path.join(file, "index.html");
   }
 
   fs.readFile(file, (error, data) => {

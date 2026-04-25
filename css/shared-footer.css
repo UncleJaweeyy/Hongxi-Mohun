@@ -1,0 +1,114 @@
+/* ------------------------------------------------------------
+   Footer and floating controls
+   Site footer plus the back-to-top button shown after scrolling.
+------------------------------------------------------------ */
+.site-footer {
+  position: relative;
+  z-index: 10;
+  padding: 3rem clamp(1rem, 4vw, 3rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  color: rgba(156, 163, 175, 0.92);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.footer-inner {
+  width: min(80rem, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.85rem 1.35rem;
+  color: rgba(107, 114, 128, 0.95);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.footer-links a {
+  transition: color 220ms ease;
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: rgba(209, 213, 219, 0.95);
+}
+
+.footer-links span {
+  color: rgba(31, 41, 55, 0.95);
+}
+
+.site-footer h2 {
+  margin: 0;
+  color: transparent;
+  background: linear-gradient(90deg, #ca8a04, #fef3c7 48%, #d97706);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+  animation: title-shine 4.8s linear infinite;
+  filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.4));
+}
+
+.site-footer p {
+  margin: 0;
+  color: rgba(107, 114, 128, 0.95);
+  font-size: 0.8rem;
+  line-height: 1.8;
+}
+
+.rating-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  margin: 0 0.25rem;
+  padding: 0.05rem 0.45rem;
+  border: 1px solid rgba(153, 27, 27, 0.9);
+  border-radius: 4px;
+  color: #b91c1c;
+  background: rgba(69, 10, 10, 0.3);
+  font-weight: 900;
+}
+
+.back-top {
+  position: fixed;
+  right: 1.75rem;
+  bottom: 1.5rem;
+  z-index: 60;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(183, 56, 45, 0.8);
+  border-radius: 8px;
+  color: #ff4d45;
+  background: rgba(5, 6, 7, 0.62);
+  box-shadow: inset 0 0 18px rgba(183, 56, 45, 0.16), 0 0 18px rgba(0, 0, 0, 0.35);
+  cursor: var(--cursor-clickable);
+  opacity: 0;
+  transform: translateY(14px);
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease, border-color 220ms ease;
+}
+
+.back-top.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.back-top:hover {
+  border-color: #ff6b62;
+  color: #fff1c2;
+}
+

@@ -1,0 +1,13 @@
+/* ------------------------------------------------------------
+   Page visibility system
+   Only the active page-view is displayed. script.js toggles is-active based
+   on the URL hash.
+------------------------------------------------------------ */
+.page-view {
+  display: none;
+}
+
+.page-view.is-active {
+  display: block;
+}
+

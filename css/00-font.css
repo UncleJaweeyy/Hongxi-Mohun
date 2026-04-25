@@ -1,0 +1,13 @@
+/* ------------------------------------------------------------
+   Font
+   Loads the calligraphy-style Chinese font used for headings, hero text,
+   class labels, and decorative marks.
+------------------------------------------------------------ */
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@600;700;800;900&display=swap");
+
+@font-face {
+  font-family: "Ma Shan Zheng";
+  src: url("../assets/fonts/MaShanZheng-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+

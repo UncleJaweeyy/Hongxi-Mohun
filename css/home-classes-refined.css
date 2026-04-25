@@ -1,0 +1,200 @@
+/* Refined class section: weapon tabs plus large image-backed class panel. */
+.class-section,
+.gallery-section,
+.community.framed-section {
+  max-width: var(--section-rail);
+}
+
+.class-layout {
+  grid-template-columns: minmax(150px, 230px) 1fr;
+  gap: clamp(1rem, 4vw, 3.5rem);
+  align-items: stretch;
+}
+
+.weapon-tabs {
+  gap: 0.8rem;
+}
+
+.weapon-tabs button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 70px;
+  padding: 0.65rem 1.25rem;
+  border: 0;
+  border-left: 4px solid transparent;
+  border-radius: 3px;
+  background: rgba(127, 29, 29, 0.5);
+  color: rgba(255, 210, 210, 0.55);
+  transform: skewX(-16deg);
+  overflow: hidden;
+}
+
+.weapon-tabs button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+  transform: translateX(-140%);
+  opacity: 0;
+}
+
+.weapon-tabs button > * {
+  position: relative;
+  z-index: 1;
+  transform: skewX(16deg);
+}
+
+.weapon-tabs strong {
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-weight: 400;
+  line-height: 1;
+}
+
+.weapon-tabs span {
+  color: currentColor;
+  font-size: 0.96rem;
+  font-weight: 900;
+  opacity: 0.8;
+}
+
+.weapon-tabs button:hover,
+.weapon-tabs button.is-active {
+  border-color: #ef4444;
+  color: white;
+  background: rgba(153, 27, 27, 0.9);
+  box-shadow: 0 0 24px rgba(220, 38, 38, 0.35);
+}
+
+.weapon-tabs button:hover::before,
+.weapon-tabs button.is-active::before {
+  animation: card-sweep 1000ms ease;
+  opacity: 1;
+}
+
+.class-panel {
+  min-height: clamp(430px, 62vw, 650px);
+  display: flex;
+  align-items: flex-end;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  border-color: rgba(244, 239, 225, 0.13);
+  background: #050607;
+}
+
+.class-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(5, 6, 7, 0.02) 0%, rgba(5, 6, 7, 0.18) 44%, rgba(5, 6, 7, 0.92) 100%),
+    linear-gradient(90deg, rgba(5, 6, 7, 0.86) 0%, rgba(5, 6, 7, 0.28) 50%, rgba(5, 6, 7, 0.62) 100%);
+  z-index: 1;
+}
+
+.class-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.18)),
+    var(--class-image, url("../assets/images/background_image.webp")) center / cover;
+  opacity: 0.76;
+  transform: scale(1.02);
+  transition: opacity 260ms ease, transform 460ms ease, background-image 220ms ease;
+}
+
+.class-panel:hover .class-backdrop {
+  opacity: 0.88;
+  transform: scale(1.055);
+}
+
+.class-watermark {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.10);
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(5rem, 13vw, 11rem);
+  writing-mode: vertical-rl;
+  user-select: none;
+}
+  
+.class-content {
+  position: relative;
+  z-index: 3;
+  max-width: 730px;
+}
+
+.class-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.6rem 1.25rem;
+}
+
+.class-title-row h3 {
+  margin: 0;
+  color: transparent;
+  background: linear-gradient(180deg, #fff7df, #a8a19a);
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 400;
+  line-height: 0.92;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55));
+}
+
+.class-title-row > span {
+  padding-bottom: 0.4rem;
+  color: #f04a40;
+  font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+  font-weight: 900;
+}
+
+.class-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1rem 0 1.35rem;
+}
+
+.class-tags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0.24rem 0.7rem;
+  border: 1px solid rgba(239, 68, 68, 0.42);
+  border-radius: 3px;
+  color: #ffd2d2;
+  background: rgba(127, 29, 29, 0.2);
+  font-weight: 800;
+}
+
+.class-tags .class-stars {
+  border-color: rgba(216, 177, 92, 0.4);
+  color: #f59e0b;
+  background: rgba(216, 177, 92, 0.08);
+}
+
+.class-stars i {
+  color: rgba(244, 239, 225, 0.22);
+  font-style: normal;
+}
+
+.class-content blockquote {
+  margin: 0 0 0.8rem;
+  color: #f5df9c;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.class-content p {
+  max-width: 680px;
+  color: rgba(244, 239, 225, 0.78);
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+

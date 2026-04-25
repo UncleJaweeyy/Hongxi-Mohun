@@ -1,0 +1,29 @@
+/* ------------------------------------------------------------
+   Community CTA
+   Base community section layout and Discord-style button presentation.
+------------------------------------------------------------ */
+.community {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+  border-top: 1px solid rgba(229, 213, 166, 0.16);
+}
+
+.community-copy {
+  max-width: 720px;
+}
+
+.community h2 {
+  margin: 0;
+  color: #f2d386;
+  font-family: "Ma Shan Zheng", serif;
+  font-size: clamp(2.4rem, 5vw, 4.8rem);
+  font-weight: 400;
+}
+
+.discord-button {
+  border-color: rgba(91, 177, 168, 0.5);
+  background: linear-gradient(135deg, rgba(91, 177, 168, 0.22), rgba(54, 70, 132, 0.36));
+}
+

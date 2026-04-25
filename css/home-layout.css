@@ -1,0 +1,49 @@
+/* ------------------------------------------------------------
+   Shared section layout and headings
+   Reusable width, vertical spacing, eyebrow text, headings, and standard
+   button styles used by many content sections.
+------------------------------------------------------------ */
+.section {
+  width: min(var(--section-rail), calc(100% - (var(--section-gutter) * 2)));
+  margin: 0 auto;
+  padding: clamp(4.5rem, 8vw, 7rem) 0;
+}
+
+.section-ink {
+  width: 100%;
+  padding-inline: max(1rem, calc((100vw - var(--section-rail)) / 2));
+  background:
+    linear-gradient(90deg, rgba(91, 177, 168, 0.07), transparent 24%, transparent 76%, rgba(183, 56, 45, 0.08)),
+    rgba(255, 255, 255, 0.018);
+}
+
+.section-heading {
+  max-width: 760px;
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.section-heading h1,
+.section-heading h2,
+.guides-heading h1,
+.download-heading h1 {
+  color: transparent;
+  background: linear-gradient(90deg, #7f1d1d, #ffcc73 48%, #a61d1d);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  font-size: clamp(2.55rem, 5vw, 5.25rem);
+  animation: title-shine 4.8s linear infinite;
+  filter: drop-shadow(0 0 14px rgba(183, 56, 45, 0.42));
+}
+
+.section-heading p:not(.eyebrow),
+.guides-heading p,
+.download-heading p,
+.community-copy p {
+  margin: 0.75rem auto 0;
+  color: var(--muted);
+  font-family: "Ma Shan Zheng", serif;
+  font-size: 1.18rem;
+}
+

@@ -1,0 +1,29 @@
+/* ------------------------------------------------------------
+   Design tokens
+   Central color, spacing, panel, and section-width variables used across
+   the whole website. Update these first when changing the site's theme.
+------------------------------------------------------------ */
+:root {
+  color-scheme: dark;
+  --bg: #050607;
+  --ink: #0d1113;
+  --panel: rgba(13, 17, 19, 0.82);
+  --panel-strong: rgba(8, 10, 11, 0.94);
+  --line: rgba(229, 213, 166, 0.22);
+  --line-cool: rgba(91, 177, 168, 0.28);
+  --text: #f4efe1;
+  --muted: #bdb6a4;
+  --gold: #d8b15c;
+  --jade: #5bb1a8;
+  --red: #b7382d;
+  --red-deep: #5d1716;
+  --shadow: 0 22px 70px rgba(0, 0, 0, 0.42);
+  --section-rail: 1120px;
+  --section-gutter: clamp(1rem, 5vw, 5rem);
+  --section-block-gap: clamp(2rem, 5.5vw, 4.5rem);
+  --section-inner-pad: clamp(2rem, 5vw, 4.25rem);
+  --numeric-font: "Noto Sans", Arial, sans-serif;
+  --cursor-default: url("../assets/cursors/normal_hover_pointer_large.png") 12 12, auto;
+  --cursor-clickable: url("../assets/cursors/clickable_hover_pointer_large.png") 12 12, pointer;
+}
+
