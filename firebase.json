@@ -1,4 +1,8 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
   "hosting": {
     "public": ".",
     "ignore": [
@@ -8,8 +12,14 @@
       ".github/**",
       ".git/**",
       ".vscode/**",
+      ".firebase/**",
+      "firebase-debug.log",
+      "firebase-debug.*.log",
       "node_modules/**",
       "dev-server.cjs",
+      "ADMIN_SETUP.md",
+      "firestore.rules",
+      "firestore.indexes.json",
       "js/shared/firebase-config.example.js"
     ]
   }

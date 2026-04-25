@@ -1,4 +1,9 @@
-import { rankData } from '../data/rank-data.js';
+import {
+  defaultRankingCategoryKey,
+  formatRankingScore,
+  getFallbackRankings,
+  loadRankingsFromFirestore
+} from '../shared/ranking-store.js';
 
 // ------------------------------------------------------------
 // Ranking render helpers
@@ -14,25 +19,30 @@ function crownIcon() {
 
 // Renders ranking rows for the selected tab/category.
 // It also adds special classes to the top three rows for gold/silver/bronze styling.
-function renderRank(category = "世界头目") {
-  const body = document.getElementById("rank-body");
+const rankingState = {
+  activeCategory: defaultRankingCategoryKey,
+  rankings: getFallbackRankings()
+};
+
+function renderRank(category = defaultRankingCategoryKey) {
+  const body = document.getElementById('rank-body');
   if (!body) return;
 
-  const rows = rankData[category] || [];
-  const list = body.closest(".rank-list");
+  const rows = rankingState.rankings[category] || [];
+  const list = body.closest('.rank-list');
   list?.classList.toggle("has-rows", rows.length > 0);
 
-  body.innerHTML = rows.map(([name, school, score], index) => {
-    const place = index + 1;
+  body.innerHTML = rows.map((entry, index) => {
+    const place = entry.position || index + 1;
     const medalClass = place === 1 ? " rank-row--gold" : place === 2 ? " rank-row--silver" : place === 3 ? " rank-row--bronze" : "";
     const icon = place <= 3 ? crownIcon() : "";
 
     return `
       <div class="rank-row${medalClass}" role="row">
         <span class="rank-place">${place}</span>
-        <span class="rank-player">${icon}${name}</span>
-        <span class="rank-school">${school}</span>
-        <span class="rank-score">${score}</span>
+        <span class="rank-player">${icon}${entry.name}</span>
+        <span class="rank-school">${entry.school}</span>
+        <span class="rank-score">${formatRankingScore(entry.score)}</span>
       </div>
     `;
   }).join("");
@@ -43,9 +53,16 @@ export function initRanking() {
     button.addEventListener('click', () => {
       document.querySelectorAll('[data-rank-tab]').forEach((tab) => tab.classList.remove('is-active'));
       button.classList.add('is-active');
-      renderRank(button.dataset.rankTab);
+      rankingState.activeCategory = button.dataset.rankTab || defaultRankingCategoryKey;
+      renderRank(rankingState.activeCategory);
     });
   });
 
-  renderRank();
+  renderRank(rankingState.activeCategory);
+
+  void (async () => {
+    const result = await loadRankingsFromFirestore();
+    rankingState.rankings = result.rankings;
+    renderRank(rankingState.activeCategory);
+  })();
 }
