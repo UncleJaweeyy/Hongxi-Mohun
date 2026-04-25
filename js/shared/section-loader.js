@@ -20,7 +20,8 @@ export async function loadSectionIncludes(onProgress) {
     if (!source) return;
 
     try {
-      const response = await fetch(source);
+      // Section partials change frequently, so bypass the browser cache here.
+      const response = await fetch(source, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Unable to load ${source}: ${response.status}`);
 
       placeholder.outerHTML = await response.text();

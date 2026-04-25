@@ -21,6 +21,17 @@
       "firestore.rules",
       "firestore.indexes.json",
       "js/shared/firebase-config.example.js"
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
     ]
   }
 }
