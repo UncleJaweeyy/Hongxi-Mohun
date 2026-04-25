@@ -1,4 +1,9 @@
-import { getFirebaseAuth, getFirebaseAuthModule } from './firebase-client.js';
+import {
+  getFirebaseAuth,
+  getFirebaseAuthModule,
+  getFirebaseFirestore,
+  getFirebaseFirestoreModule
+} from './firebase-client.js';
 
 const authCopy = {
   login: ['账号', '邮箱登录'],
@@ -7,10 +12,16 @@ const authCopy = {
 };
 const authSetupMessage = '请先在 js/shared/firebase-config.js 填入完整的 Firebase Web App 配置。';
 const authLoadingMessage = '正在连接江湖命脉...';
+const emailVerificationMessage = '验证邮件已发送，请前往邮箱点击验证链接。本窗口会自动确认并登录。';
+const emailVerificationWaitingMessage = '正在等待邮箱验证... 验证完成后会自动登录。若未立即收到，请检查垃圾邮件/Spam。';
+const emailVerificationTimeoutMessage = '暂未检测到邮箱验证。请验证后使用邮箱和密码登录。';
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const usernamePattern = /^[A-Za-z0-9]{4,20}$/;
 const phonePattern = /^\+?[0-9\s-]{7,20}$/;
 const secondaryPasswordPattern = /^\d{4}$/;
+const usernameTakenCode = 'auth/username-already-in-use';
+const verificationPollMs = 5000;
+const verificationTimeoutMs = 10 * 60 * 1000;
 
 function getAuthAlert(form) {
   return form?.querySelector('[data-auth-alert]');
@@ -73,6 +84,22 @@ function getTrimmedValue(form, name) {
 function getRawValue(form, name) {
   const input = getNamedInput(form, name);
   return typeof input?.value === 'string' ? input.value : '';
+}
+
+function normalizeUsername(username) {
+  return username.trim();
+}
+
+function normalizeUsernameKey(username) {
+  return normalizeUsername(username).toLowerCase();
+}
+
+function normalizeEmail(email) {
+  return email.trim().toLowerCase();
+}
+
+function normalizePhone(phone) {
+  return phone.trim().replace(/\s+/g, ' ');
 }
 
 function validateAuthForm(form) {
@@ -146,6 +173,11 @@ function formatAuthError(error) {
   const code = error?.code || '';
 
   switch (code) {
+    case 'permission-denied':
+    case 'firestore/permission-denied':
+      return '账号资料无法保存，请先部署最新 Firestore 规则后再注册。';
+    case usernameTakenCode:
+      return '该账号名已被使用，请换一个大侠名。';
     case 'auth/email-already-in-use':
       return '该邮箱已被注册，请直接登录。';
     case 'auth/invalid-email':
@@ -165,6 +197,84 @@ function formatAuthError(error) {
   }
 }
 
+async function deleteIncompleteUser(authModule, user) {
+  if (!user || typeof authModule?.deleteUser !== 'function') return;
+
+  try {
+    await authModule.deleteUser(user);
+  } catch {}
+}
+
+async function waitForEmailVerification(auth, authModule, user, onStatus) {
+  const startedAt = Date.now();
+
+  while (Date.now() - startedAt < verificationTimeoutMs) {
+    if (typeof authModule?.reload === 'function') {
+      await authModule.reload(user);
+    }
+
+    if (user.emailVerified) return true;
+
+    onStatus?.();
+    await new Promise((resolve) => {
+      window.setTimeout(resolve, verificationPollMs);
+    });
+  }
+
+  await authModule.signOut(auth);
+  return false;
+}
+
+async function createUserProfile(form, user) {
+  const firestore = await getFirebaseFirestore();
+  const firestoreModule = await getFirebaseFirestoreModule();
+
+  if (!firestore || !firestoreModule) {
+    throw new Error('Firestore is not configured.');
+  }
+
+  const { doc, runTransaction, serverTimestamp } = firestoreModule;
+  const username = normalizeUsername(getTrimmedValue(form, 'username'));
+  const usernameKey = normalizeUsernameKey(username);
+  const phone = normalizePhone(getTrimmedValue(form, 'phone'));
+  const secondaryPassword = getTrimmedValue(form, 'secondaryPassword');
+  const email = user.email || normalizeEmail(getTrimmedValue(form, 'email'));
+  const userRef = doc(firestore, 'users', user.uid);
+  const usernameRef = doc(firestore, 'usernames', usernameKey);
+
+  await runTransaction(firestore, async (transaction) => {
+    const usernameSnapshot = await transaction.get(usernameRef);
+
+    if (usernameSnapshot.exists()) {
+      const error = new Error('Username already in use.');
+      error.code = usernameTakenCode;
+      throw error;
+    }
+
+    transaction.set(usernameRef, {
+      uid: user.uid,
+      username,
+      usernameLower: usernameKey,
+      createdAt: serverTimestamp()
+    });
+
+    transaction.set(userRef, {
+      uid: user.uid,
+      username,
+      usernameLower: usernameKey,
+      email,
+      phone,
+      hasPhone: Boolean(phone),
+      hasSecondaryPassword: Boolean(secondaryPassword),
+      role: 'player',
+      authProvider: 'password',
+      emailVerified: Boolean(user.emailVerified),
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+  });
+}
+
 function getUserLabel(user) {
   const source = user?.displayName?.trim() || user?.email?.split('@')[0] || '少侠';
   return source.length > 10 ? `${source.slice(0, 10)}...` : source;
@@ -175,7 +285,7 @@ function syncAuthActions(user) {
     const [loginButton, primaryButton] = actions.querySelectorAll('button');
     if (!loginButton || !primaryButton) return;
 
-    if (user) {
+    if (user?.emailVerified) {
       loginButton.textContent = getUserLabel(user);
       loginButton.disabled = true;
       loginButton.classList.add('auth-user');
@@ -281,12 +391,35 @@ export function initAuth() {
 
       try {
         if (form.dataset.authForm === 'login') {
-          await authModule.signInWithEmailAndPassword(
+          const credential = await authModule.signInWithEmailAndPassword(
             auth,
-            getTrimmedValue(form, 'email'),
+            normalizeEmail(getTrimmedValue(form, 'email')),
             getRawValue(form, 'password')
           );
 
+          if (typeof authModule?.reload === 'function') {
+            await authModule.reload(credential.user);
+          }
+
+          if (!credential.user.emailVerified) {
+            try {
+              await authModule.sendEmailVerification(credential.user);
+            } catch {}
+
+            setAuthAlert(form, emailVerificationMessage, 'success');
+            setFormPending(form, true, '等待验证...');
+
+            const isVerified = await waitForEmailVerification(auth, authModule, credential.user, () => {
+              setAuthAlert(form, emailVerificationWaitingMessage, 'success');
+            });
+
+            if (!isVerified) {
+              setAuthAlert(form, emailVerificationTimeoutMessage, 'error');
+              return;
+            }
+          }
+
+          syncAuthActions(credential.user);
           setAuthAlert(form, '登录成功，正在进入江湖...', 'success');
           form.reset();
           window.setTimeout(closeAuth, 600);
@@ -295,26 +428,47 @@ export function initAuth() {
         if (form.dataset.authForm === 'register') {
           const credential = await authModule.createUserWithEmailAndPassword(
             auth,
-            getTrimmedValue(form, 'email'),
+            normalizeEmail(getTrimmedValue(form, 'email')),
             getRawValue(form, 'password')
           );
 
           const username = getTrimmedValue(form, 'username');
-          if (username) {
-            await authModule.updateProfile(credential.user, { displayName: username });
+
+          try {
+            if (username) {
+              await authModule.updateProfile(credential.user, { displayName: normalizeUsername(username) });
+            }
+
+            await createUserProfile(form, credential.user);
+          } catch (profileError) {
+            await deleteIncompleteUser(authModule, credential.user);
+            throw profileError;
           }
 
           try {
             await authModule.sendEmailVerification(credential.user);
           } catch {}
 
-          setAuthAlert(form, '账号创建成功，已自动登录。验证邮件也已发往你的邮箱。', 'success');
+          setAuthAlert(form, emailVerificationMessage, 'success');
+          setFormPending(form, true, '等待验证...');
+
+          const isVerified = await waitForEmailVerification(auth, authModule, credential.user, () => {
+            setAuthAlert(form, emailVerificationWaitingMessage, 'success');
+          });
+
+          if (!isVerified) {
+            setAuthAlert(form, emailVerificationTimeoutMessage, 'error');
+            return;
+          }
+
+          syncAuthActions(credential.user);
+          setAuthAlert(form, '邮箱验证成功，正在进入江湖...', 'success');
           form.reset();
-          window.setTimeout(closeAuth, 900);
+          window.setTimeout(closeAuth, 700);
         }
 
         if (form.dataset.authForm === 'forgot') {
-          await authModule.sendPasswordResetEmail(auth, getTrimmedValue(form, 'email'));
+          await authModule.sendPasswordResetEmail(auth, normalizeEmail(getTrimmedValue(form, 'email')));
           setAuthAlert(form, '重置邮件已发送，请前往邮箱查收。', 'success');
           form.reset();
         }

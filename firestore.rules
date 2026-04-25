@@ -16,6 +16,92 @@ service cloud.firestore {
         adminDoc().data.active == true;
     }
 
+    function isValidUsername(value) {
+      return value is string && value.matches('^[A-Za-z0-9]{4,20}$');
+    }
+
+    function isValidUsernameKey(value) {
+      return value is string && value.matches('^[a-z0-9]{4,20}$');
+    }
+
+    function isValidPhone(value) {
+      return value is string &&
+        (value == '' || value.matches('^\\+?[0-9\\s-]{7,20}$'));
+    }
+
+    function hasValidUserProfileFields() {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'username',
+        'usernameLower',
+        'email',
+        'phone',
+        'hasPhone',
+        'hasSecondaryPassword',
+        'role',
+        'authProvider',
+        'emailVerified',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      request.resource.data.keys().hasAll([
+        'uid',
+        'username',
+        'usernameLower',
+        'email',
+        'phone',
+        'hasPhone',
+        'hasSecondaryPassword',
+        'role',
+        'authProvider',
+        'emailVerified',
+        'createdAt',
+        'updatedAt'
+      ]);
+    }
+
+    function hasValidUserProfileValues(uid) {
+      return request.resource.data.uid == uid &&
+        request.resource.data.uid == request.auth.uid &&
+        request.resource.data.email == request.auth.token.email &&
+        isValidUsername(request.resource.data.username) &&
+        isValidUsernameKey(request.resource.data.usernameLower) &&
+        isValidPhone(request.resource.data.phone) &&
+        request.resource.data.hasPhone == (request.resource.data.phone != '') &&
+        request.resource.data.hasSecondaryPassword is bool &&
+        request.resource.data.emailVerified is bool &&
+        request.resource.data.role == 'player' &&
+        request.resource.data.authProvider == 'password' &&
+        getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.usernameLower)).data.uid == request.auth.uid;
+    }
+
+    function isValidUserProfileCreate(uid) {
+      return hasValidUserProfileFields() &&
+        hasValidUserProfileValues(uid) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.updatedAt == request.time;
+    }
+
+    function isValidUsernameReservation(usernameKey) {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'username',
+        'usernameLower',
+        'createdAt'
+      ]) &&
+      request.resource.data.keys().hasAll([
+        'uid',
+        'username',
+        'usernameLower',
+        'createdAt'
+      ]) &&
+      request.resource.data.uid == request.auth.uid &&
+      request.resource.data.usernameLower == usernameKey &&
+      isValidUsername(request.resource.data.username) &&
+      isValidUsernameKey(request.resource.data.usernameLower) &&
+      request.resource.data.createdAt == request.time;
+    }
+
     match /siteContent/rankings {
       allow read: if true;
       allow write: if isAdmin();
@@ -29,6 +115,22 @@ service cloud.firestore {
     match /admins/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if isAdmin();
+    }
+
+    match /users/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create: if signedIn() && isValidUserProfileCreate(uid);
+      allow update, delete: if false;
+    }
+
+    match /usernames/{usernameKey} {
+      allow get: if signedIn();
+      allow list: if isAdmin();
+      allow create: if signedIn() &&
+        !exists(/databases/$(database)/documents/usernames/$(usernameKey)) &&
+        isValidUsernameReservation(usernameKey);
+      allow update, delete: if false;
     }
 
     match /{document=**} {
