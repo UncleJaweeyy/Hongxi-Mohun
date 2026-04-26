@@ -47,6 +47,14 @@
     grid-template-columns: 1fr;
   }
 
+  .profile-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .phone-verify-row {
+    grid-template-columns: 1fr;
+  }
+
   .hero-lines {
     font-size: 1.35rem;
     letter-spacing: 0.28em;

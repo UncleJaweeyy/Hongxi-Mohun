@@ -15,8 +15,12 @@ Created when a player signs up.
 {
   "uid": "firebase-auth-uid",
   "username": "HeroName",
+  "usernameLower": "heroname",
   "email": "player@example.com",
   "phone": "",
+  "online": true,
+  "lastOnlineAt": "serverTimestamp()",
+  "updatedAt": "serverTimestamp()",
   "createdAt": "serverTimestamp()"
 }
 ```
