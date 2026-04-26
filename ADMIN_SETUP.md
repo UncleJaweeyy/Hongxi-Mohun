@@ -45,7 +45,7 @@ Created in the same Firestore transaction as `users/{uid}` to reserve unique acc
   "categories": {
     "worldBoss": {
       "label": "世界头目",
-      "metricLabel": "战力/积分",
+      "metricLabel": "等级",
       "entries": [
         {
           "id": "worldBoss-1",

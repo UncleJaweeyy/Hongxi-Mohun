@@ -254,8 +254,8 @@ function renderRankingRows(refs) {
         </label>
 
         <label class="auth-field">
-          <span>战力 / 积分</span>
-          <input type="number" min="0" step="1" value="${entry.score}" data-admin-field="score" placeholder="请输入分数">
+          <span>等级</span>
+          <input type="number" min="0" step="1" value="${entry.score}" data-admin-field="score" placeholder="请输入等级">
         </label>
       </div>
     </article>
@@ -436,7 +436,7 @@ function validateRankingsForSave(refs) {
       const checks = [
         { field: 'name', label: '豪侠 / 帮会名', invalid: !String(entry.name || '').trim() },
         { field: 'school', label: '流派 / 类型', invalid: !String(entry.school || '').trim() },
-        { field: 'score', label: '战力 / 积分', invalid: !Number.isFinite(Number(entry.score)) || Number(entry.score) <= 0 }
+        { field: 'score', label: '等级', invalid: !Number.isFinite(Number(entry.score)) || Number(entry.score) <= 0 }
       ];
       const failed = checks.find((check) => check.invalid);
 

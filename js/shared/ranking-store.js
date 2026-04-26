@@ -2,10 +2,10 @@ import { rankData } from '../data/rank-data.js';
 import { getFirebaseFirestore, getFirebaseFirestoreModule } from './firebase-client.js';
 
 export const rankingCategories = [
-  { key: 'worldBoss', label: '世界头目', metricLabel: '战力/积分' },
-  { key: 'dungeon', label: '副本榜单', metricLabel: '战力/积分' },
-  { key: 'slaughter', label: '杀戮战场', metricLabel: '战力/积分' },
-  { key: 'siege', label: '攻城争霸', metricLabel: '战力/积分' }
+  { key: 'worldBoss', label: '世界头目', metricLabel: '等级' },
+  { key: 'dungeon', label: '副本榜单', metricLabel: '等级' },
+  { key: 'slaughter', label: '杀戮战场', metricLabel: '等级' },
+  { key: 'siege', label: '攻城争霸', metricLabel: '等级' }
 ];
 
 export const defaultRankingCategoryKey = rankingCategories[0].key;
