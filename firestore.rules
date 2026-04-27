@@ -124,6 +124,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /siteContent/links {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /admins/{uid} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow write: if isAdmin();

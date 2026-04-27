@@ -6,6 +6,7 @@ import { initClickSound } from './shared/click-sound.js';
 import { initLeafCanvas } from './shared/leaf-canvas.js';
 import { initRunningBorders } from './shared/running-borders.js';
 import { initBackgroundMusic } from './shared/background-music.js';
+import { applySiteLinks } from './shared/site-links-store.js';
 import { initHeroLogoAnimation } from './home/hero-logo.js';
 import { initRanking } from './home/ranking.js';
 import { initClassShowcase } from './home/classes.js';
@@ -98,6 +99,7 @@ async function boot() {
 
   await initClickSound();
   await initBackgroundMusic();
+  await applySiteLinks();
 
   const initializers = [
     initNavigation,

@@ -20,6 +20,12 @@ import {
   loadRankingsFromFirestore,
   rankingCategories
 } from '../shared/ranking-store.js';
+import {
+  buildSiteLinksDocument,
+  getFallbackSiteLinks,
+  isValidSiteLink,
+  loadSiteLinksFromFirestore
+} from '../shared/site-links-store.js';
 
 const state = {
   activeCategory: defaultRankingCategoryKey,
@@ -27,9 +33,12 @@ const state = {
   contentMode: 'dashboard',
   dirty: {
     rankings: false,
-    news: false
+    news: false,
+    links: false
   },
   isAdmin: false,
+  links: getFallbackSiteLinks(),
+  linksUpdatedAt: null,
   newsItems: getFallbackNewsItems(),
   newsUpdatedAt: null,
   rankings: getFallbackRankings(),
@@ -38,7 +47,7 @@ const state = {
 };
 
 const alertTimers = new WeakMap();
-const editorModes = new Set(['rankings', 'news']);
+const editorModes = new Set(['rankings', 'news', 'links']);
 
 function setAlert(element, message, tone = 'warning', options = {}) {
   if (!element) return;
@@ -97,6 +106,12 @@ function createReferences() {
       rowList: document.querySelector('[data-admin-news-row-list]'),
       saveButton: document.querySelector('[data-admin-news-save]'),
       updatedMeta: document.querySelector('[data-admin-news-updated-meta]')
+    },
+    links: {
+      fields: Array.from(document.querySelectorAll('[data-admin-links-field]')),
+      previewList: document.querySelector('[data-admin-links-preview-list]'),
+      saveButton: document.querySelector('[data-admin-links-save]'),
+      updatedMeta: document.querySelector('[data-admin-links-updated-meta]')
     },
     status: document.querySelector('[data-admin-status]')
   };
@@ -188,6 +203,7 @@ function hasAnyUnsavedChanges() {
 function getModeLabel(mode) {
   if (mode === 'rankings') return '排行榜';
   if (mode === 'news') return '快报公告';
+  if (mode === 'links') return '站点链接';
   return '当前内容';
 }
 
@@ -355,6 +371,34 @@ function renderNews(refs) {
   renderNewsPreview(refs);
 }
 
+function getLinkLabel(key) {
+  if (key === 'discordUrl') return 'Discord 社群链接';
+  if (key === 'downloadUrl') return '客户端下载文件链接';
+  return key;
+}
+
+function renderLinks(refs) {
+  refs.links.fields.forEach((input) => {
+    const key = input.dataset.adminLinksField;
+    if (!key) return;
+    if (document.activeElement !== input) input.value = state.links[key] || '';
+  });
+
+  if (refs.links.previewList) {
+    const rows = Object.entries(state.links).map(([key, value]) => `
+      <li>
+        <span>${escapeHtml(getLinkLabel(key))}</span>
+        <strong>${escapeHtml(value || '未设置')}</strong>
+      </li>
+    `);
+
+    refs.links.previewList.innerHTML = rows.join('');
+  }
+
+  if (refs.links.updatedMeta) refs.links.updatedMeta.textContent = formatUpdatedMeta(state.linksUpdatedAt, state.user);
+  if (refs.links.saveButton) refs.links.saveButton.textContent = state.dirty.links ? '保存链接 *' : '保存链接';
+}
+
 function renderSession(refs) {
   if (!state.isAdmin) {
     state.contentMode = 'dashboard';
@@ -372,6 +416,7 @@ function renderAdmin(refs) {
   renderContentMode(refs);
   renderRankings(refs);
   renderNews(refs);
+  renderLinks(refs);
 }
 
 async function isAuthorizedAdmin(user) {
@@ -408,6 +453,18 @@ async function refreshNews(refs, statusMessage = '') {
   }
 }
 
+async function refreshLinks(refs, statusMessage = '') {
+  const result = await loadSiteLinksFromFirestore();
+  state.links = result.links;
+  state.linksUpdatedAt = result.updatedAt ?? null;
+  state.dirty.links = false;
+  renderLinks(refs);
+
+  if (statusMessage) {
+    setAlert(refs.status, statusMessage, 'success', { autoHideMs: 2600 });
+  }
+}
+
 function focusRankingField(refs, entryId, field) {
   window.requestAnimationFrame(() => {
     const row = Array.from(refs.rankings.rowList?.querySelectorAll('[data-entry-id]') || [])
@@ -423,6 +480,14 @@ function focusNewsField(refs, newsId, field) {
     const row = Array.from(refs.news.rowList?.querySelectorAll('[data-news-id]') || [])
       .find((item) => item.dataset.newsId === newsId);
     const input = row?.querySelector(`[data-admin-news-field="${field}"]`);
+    input?.focus();
+    input?.select?.();
+  });
+}
+
+function focusLinkField(refs, field) {
+  window.requestAnimationFrame(() => {
+    const input = refs.links.fields.find((item) => item.dataset.adminLinksField === field);
     input?.focus();
     input?.select?.();
   });
@@ -474,6 +539,20 @@ function validateNewsForSave(refs) {
   }
 
   return true;
+}
+
+function validateLinksForSave(refs) {
+  const checks = [
+    { field: 'discordUrl', label: 'Discord 社群链接', value: state.links.discordUrl },
+    { field: 'downloadUrl', label: '客户端下载文件链接', value: state.links.downloadUrl }
+  ];
+
+  const failed = checks.find((check) => !isValidSiteLink(check.value));
+  if (!failed) return true;
+
+  setAlert(refs.status, `请填写有效的 ${failed.label}，链接需要以 http:// 或 https:// 开头。`, 'error', { autoHideMs: 4200 });
+  focusLinkField(refs, failed.field);
+  return false;
 }
 
 function confirmSave(label) {
@@ -556,6 +635,44 @@ async function saveNews(refs, options = {}) {
   }
 }
 
+async function saveLinks(refs, options = {}) {
+  const { confirm = true } = options;
+
+  if (!validateLinksForSave(refs)) return false;
+  if (confirm && !confirmSave('社群与下载链接')) return false;
+
+  const db = await getFirebaseFirestore();
+  const firestore = await getFirebaseFirestoreModule();
+
+  if (!db || !firestore || !state.user) {
+    setAlert(refs.status, '服务暂时不可用，当前无法保存。', 'error');
+    return false;
+  }
+
+  refs.links.saveButton.disabled = true;
+  refs.links.saveButton.textContent = '正在保存...';
+
+  try {
+    const actor = {
+      uid: state.user.uid,
+      email: state.user.email || '',
+      displayName: state.user.displayName || ''
+    };
+
+    const payload = buildSiteLinksDocument(state.links, actor, firestore.serverTimestamp());
+    await firestore.setDoc(firestore.doc(db, 'siteContent', 'links'), payload, { merge: true });
+    await refreshLinks(refs, '链接已成功保存。');
+    return true;
+  } catch (error) {
+    console.error('Unable to save site links.', error);
+    setAlert(refs.status, '保存失败，请稍后重试或联系管理员。', 'error');
+    return false;
+  } finally {
+    refs.links.saveButton.disabled = false;
+    renderLinks(refs);
+  }
+}
+
 function showUnsavedChangesDialog(mode) {
   const label = getModeLabel(mode);
 
@@ -599,6 +716,7 @@ function showUnsavedChangesDialog(mode) {
 async function saveContentMode(refs, mode) {
   if (mode === 'rankings') return saveRankings(refs, { confirm: false });
   if (mode === 'news') return saveNews(refs, { confirm: false });
+  if (mode === 'links') return saveLinks(refs, { confirm: false });
   return true;
 }
 
@@ -610,6 +728,11 @@ async function discardContentMode(refs, mode) {
 
   if (mode === 'news') {
     await refreshNews(refs);
+    return true;
+  }
+
+  if (mode === 'links') {
+    await refreshLinks(refs);
     return true;
   }
 
@@ -805,6 +928,35 @@ function wireNewsEditorEvents(refs) {
   });
 }
 
+function wireLinksEditorEvents(refs) {
+  refs.links.fields.forEach((input) => {
+    input.addEventListener('input', () => {
+      const key = input.dataset.adminLinksField;
+      if (!key) return;
+
+      state.links[key] = input.value.trim();
+      markDirty('links');
+      renderLinks(refs);
+    });
+  });
+
+  document.querySelector('[data-admin-links-reload]')?.addEventListener('click', async () => {
+    await refreshLinks(refs, '链接内容已刷新。');
+  });
+
+  document.querySelector('[data-admin-links-load-sample]')?.addEventListener('click', () => {
+    state.links = getFallbackSiteLinks();
+    state.linksUpdatedAt = null;
+    markDirty('links');
+    renderLinks(refs);
+    setAlert(refs.status, '默认链接已载入，保存后将覆盖当前线上数据。', 'success', { autoHideMs: 2600 });
+  });
+
+  refs.links.saveButton?.addEventListener('click', async () => {
+    await saveLinks(refs);
+  });
+}
+
 function wireContentModeEvents(refs) {
   refs.dashboardOpenButtons.forEach((button) => {
     button.addEventListener('click', async () => {
@@ -850,6 +1002,7 @@ async function bootAdminPage() {
   wireContentModeEvents(refs);
   wireRankingsEditorEvents(refs);
   wireNewsEditorEvents(refs);
+  wireLinksEditorEvents(refs);
   setContentMode(refs, 'dashboard', { history: 'replace' });
   renderAdmin(refs);
   renderSession(refs);
@@ -908,7 +1061,8 @@ async function bootAdminPage() {
 
       await Promise.all([
         refreshRankings(refs),
-        refreshNews(refs)
+        refreshNews(refs),
+        refreshLinks(refs)
       ]);
 
       setContentMode(refs, 'dashboard', { history: 'replace' });

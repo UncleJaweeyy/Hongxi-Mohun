@@ -88,6 +88,21 @@ Created in the same Firestore transaction as `users/{uid}` to reserve unique acc
 }
 ```
 
+### `siteContent/links`
+
+```json
+{
+  "discordUrl": "https://discord.gg/TRDX3ggHpf",
+  "downloadUrl": "https://drive.google.com/file/d/example/view?usp=sharing",
+  "updatedAt": "serverTimestamp()",
+  "updatedBy": {
+    "uid": "firebase-auth-uid",
+    "email": "admin@example.com",
+    "displayName": "运营"
+  }
+}
+```
+
 ### `admins/{uid}`
 
 ```json
@@ -116,4 +131,4 @@ Created in the same Firestore transaction as `users/{uid}` to reserve unique acc
 
 4. Deploy Firestore rules with `firebase deploy --only firestore`.
 
-After that, the client can sign in at `/pages/admin/` and edit the rankings and 快报内容 directly.
+After that, the client can sign in at `/pages/admin/` and edit the rankings, 快报内容, Discord link, and client download link directly.

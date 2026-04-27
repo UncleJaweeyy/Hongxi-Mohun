@@ -667,6 +667,9 @@
   color: var(--admin-accent);
   font-size: 0.92rem;
   font-weight: 600;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .admin-preview-meta {

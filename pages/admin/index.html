@@ -103,6 +103,12 @@
                   <strong>快报公告管理</strong>
                   <span>维护首页快报与完整公告列表、正文和发布时间。</span>
                 </button>
+
+                <button class="admin-dashboard-card" type="button" data-admin-open-mode="links">
+                  <span class="admin-dashboard-kicker">Links</span>
+                  <strong>链接管理</strong>
+                  <span>维护 Discord 社群按钮与客户端下载按钮跳转地址。</span>
+                </button>
               </div>
             </section>
 
@@ -192,6 +198,62 @@
                   </div>
                   <ol class="admin-preview-list" data-admin-news-preview-list></ol>
                   <p class="admin-preview-meta" data-admin-news-updated-meta>尚未载入最新内容。</p>
+                </aside>
+              </div>
+            </section>
+
+            <section class="admin-content-panel" data-admin-content-panel="links" hidden>
+              <button class="text-button admin-view-back" type="button" data-admin-back-dashboard>返回工作台</button>
+
+              <div class="admin-toolbar">
+                <div class="admin-toolbar-head">
+                  <div>
+                    <p class="admin-card-kicker">Site Links</p>
+                    <h2>社群与下载链接</h2>
+                  </div>
+                  <div class="admin-toolbar-actions admin-toolbar-actions--compact">
+                    <button class="text-button" type="button" data-admin-links-reload>重新读取</button>
+                    <button class="text-button" type="button" data-admin-links-load-sample>恢复默认</button>
+                    <button class="auth-submit admin-save-button" type="button" data-admin-links-save>保存链接</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="admin-editor-layout">
+                <section class="admin-editor-card">
+                  <div class="admin-editor-card-head">
+                    <div>
+                      <p class="admin-card-kicker">Editor</p>
+                      <h2>链接地址</h2>
+                    </div>
+                  </div>
+
+                  <div class="admin-row-list">
+                    <article class="admin-row-card">
+                      <div class="admin-row-fields">
+                        <label class="auth-field auth-field--full">
+                          <span>Discord 社群链接</span>
+                          <input type="url" data-admin-links-field="discordUrl" placeholder="https://discord.gg/...">
+                        </label>
+
+                        <label class="auth-field auth-field--full">
+                          <span>客户端下载文件链接</span>
+                          <input type="url" data-admin-links-field="downloadUrl" placeholder="https://...">
+                        </label>
+                      </div>
+                    </article>
+                  </div>
+                </section>
+
+                <aside class="admin-preview-card">
+                  <div class="admin-card-heading">
+                    <div>
+                      <p class="admin-card-kicker">Preview</p>
+                      <h2>当前链接</h2>
+                    </div>
+                  </div>
+                  <ol class="admin-preview-list" data-admin-links-preview-list></ol>
+                  <p class="admin-preview-meta" data-admin-links-updated-meta>尚未载入最新内容。</p>
                 </aside>
               </div>
             </section>
