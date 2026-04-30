@@ -230,7 +230,7 @@ function renderRankingPreview(refs) {
   previewList.innerHTML = previewEntries.map((entry) => `
     <li>
       <span>${entry.position}. ${escapeHtml(entry.name || '未命名')}</span>
-      <strong>${escapeHtml(entry.school || '未设置流派')} · ${formatRankingScore(entry.score)}</strong>
+      <strong>${escapeHtml(entry.school || '未设置帮派')} · ${formatRankingScore(entry.score)}</strong>
     </li>
   `).join('');
 
@@ -265,8 +265,8 @@ function renderRankingRows(refs) {
         </label>
 
         <label class="auth-field">
-          <span>流派 / 类型</span>
-          <input type="text" value="${escapeHtml(entry.school)}" data-admin-field="school" placeholder="请输入流派">
+          <span>帮派 / 类型</span>
+          <input type="text" value="${escapeHtml(entry.school)}" data-admin-field="school" placeholder="请输入帮派">
         </label>
 
         <label class="auth-field">
@@ -500,7 +500,7 @@ function validateRankingsForSave(refs) {
     for (const [index, entry] of entries.entries()) {
       const checks = [
         { field: 'name', label: '豪侠 / 帮会名', invalid: !String(entry.name || '').trim() },
-        { field: 'school', label: '流派 / 类型', invalid: !String(entry.school || '').trim() },
+        { field: 'school', label: '帮派 / 类型', invalid: !String(entry.school || '').trim() },
         { field: 'score', label: '等级', invalid: !Number.isFinite(Number(entry.score)) || Number(entry.score) <= 0 }
       ];
       const failed = checks.find((check) => check.invalid);

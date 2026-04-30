@@ -3,7 +3,7 @@ import { getFirebaseFirestore, getFirebaseFirestoreModule } from './firebase-cli
 
 export const rankingCategories = [
   { key: 'worldBoss', label: '世界头目', metricLabel: '等级' },
-  { key: 'dungeon', label: '副本榜单', metricLabel: '等级' },
+  { key: 'dungeon', label: '全色达人', metricLabel: '等级' },
   { key: 'slaughter', label: '杀戮战场', metricLabel: '等级' },
   { key: 'siege', label: '攻城争霸', metricLabel: '等级' }
 ];
